@@ -2,6 +2,8 @@ import osmnx as ox
 import geopandas as gpd
 import json, shutil, os
 import Levenshtein
+from shapely.ops import unary_union
+
 
 def features_from_place(place_name, tags):
     features = ox.geometries.geometries_from_place(place_name, tags=tags)
@@ -50,3 +52,27 @@ def save_gdf_row_by_match(gdf,colum,value,outputpath):
 def wipe_osmnx_cache(folderpath='cache'):
     if os.path.exists(folderpath):
         shutil.rmtree(folderpath)
+
+def unary_union_from_gdf(input_gdf):
+    return unary_union(input_gdf.geometry)
+
+def multigeom_to_gdf(inputgeom,crs,outfilepath=None):
+
+    splitted_geoms = {
+    'names' : [],
+    'geometry' : []
+    }
+
+    for i,subgeom in enumerate(inputgeom):
+        splitted_geoms['names'].append(f'{i}')
+        splitted_geoms['geometry'].append(subgeom)
+
+    as_gdf = gpd.GeoDataFrame(splitted_geoms,crs=crs)
+    
+
+    if outfilepath:
+        # gdf_to_file(as_gdf,outfilepath)
+        as_gdf.to_file(outfilepath)
+
+
+    return as_gdf
