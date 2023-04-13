@@ -1,6 +1,6 @@
 import osmnx as ox
 import geopandas as gpd
-import json
+import json, shutil, os
 import Levenshtein
 
 def features_from_place(place_name, tags):
@@ -46,3 +46,7 @@ def most_similar_string_in_df(df,column,target_string):
 def save_gdf_row_by_match(gdf,colum,value,outputpath):
     row = gdf[gdf[colum] == value]
     gdf_to_file(row,outputpath)
+
+def wipe_osmnx_cache(folderpath='cache'):
+    if os.path.exists(folderpath):
+        shutil.rmtree(folderpath)
