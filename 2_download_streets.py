@@ -21,5 +21,5 @@ wipe_osmnx_cache()
 gdf_dict = {}
 for key in NEIGHBORHOODS:
     # gdf_dict[key] = features_from_place(key,{'highway':True})
-    features_to_file(NEIGHBORHOODS[key],{'highway':highway_tags},key+street_suffix)
+    features_to_file(NEIGHBORHOODS[key],{'highway':highway_values},key+streets_suffix)
 

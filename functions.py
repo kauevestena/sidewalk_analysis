@@ -76,3 +76,21 @@ def multigeom_to_gdf(inputgeom,crs,outfilepath=None):
 
 
     return as_gdf
+
+
+def find_intersections(input_gdf,return_gdf = True):
+
+    intersections_dict = {'names':[],'geometry':[]}
+
+    for i,line in enumerate(input_gdf.geometry):
+        for j,line2 in enumerate(input_gdf.geometry):
+            if not i == j:
+                if line.intersects(line2):
+                    intersec = line.intersection(line2)
+                    intersections_dict['names'].append(f'{i} {j} ')
+                    intersections_dict['geometry'].append(intersec)
+
+    if return_gdf:
+        return gpd.GeoDataFrame(intersections_dict,crs=input_gdf.crs)
+    else:
+        return MultiPoint(intersections_dict['geometry'])

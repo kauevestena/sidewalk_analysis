@@ -8,8 +8,16 @@ CITY_DESCRIPTION = 'Curitiba, Brazil'
 # Key, description for Nominatim
 NEIGHBORHOODS = {'agua_verde':'Água Verde, Curitiba','jardim_das_americas':'Jardim das Américas, Curitiba'}
 
-highway_tags = ['motorway','trunk','primary','secondary','tertiary','unclassified','residential','living_street']
+highway_values = ['motorway','trunk','primary','secondary','tertiary','unclassified','residential','living_street']
 
-street_suffix = '_streets.geojson'
+sidewalks_dict = {'footway':['sidewalk','crossing'],'barrier':['kerb'],'kerb':True}
+
+streets_suffix = '_streets.geojson'
 
 blocks_suffix = '_protoblocks.geojson'
+
+sidewalks_suffix = '_sidewalks.geojson'
+
+splitted_suffix = '_splitted.geojson'
+
+intersections_suffix = '_intersections.geojson'
