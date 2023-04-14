@@ -63,7 +63,7 @@ def multigeom_to_gdf(inputgeom,crs,outfilepath=None):
     'geometry' : []
     }
 
-    for i,subgeom in enumerate(inputgeom):
+    for i,subgeom in enumerate(inputgeom.geoms):
         splitted_geoms['names'].append(f'{i}')
         splitted_geoms['geometry'].append(subgeom)
 
