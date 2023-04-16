@@ -1,3 +1,4 @@
+# python executable:
 PYTHONPATH=/bin/python3
 
 $PYTHONPATH 1_download_boundaries.py
