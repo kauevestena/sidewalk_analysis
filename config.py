@@ -12,12 +12,16 @@ highway_values = ['motorway','trunk','primary','secondary','tertiary','unclassif
 
 sidewalks_dict = {'footway':['sidewalk','crossing'],'barrier':['kerb'],'kerb':True}
 
-streets_suffix = '_streets.geojson'
+EXTENSION = '.geojson'
 
-blocks_suffix = '_protoblocks.geojson'
+streets_suffix = '_streets'+EXTENSION
 
-sidewalks_suffix = '_sidewalks.geojson'
+blocks_suffix = '_protoblocks'+EXTENSION
 
-splitted_suffix = '_splitted.geojson'
+sidewalks_suffix = '_sidewalks'+EXTENSION
 
-intersections_suffix = '_intersections.geojson'
+splitted_suffix = '_splitted'+EXTENSION
+
+intersections_suffix = '_intersections'+EXTENSION
+
+neighborhoods_descriptive_statistics_path = 'neighborhoods_descriptive.json'

@@ -94,3 +94,12 @@ def find_intersections(input_gdf,return_gdf = True):
         return gpd.GeoDataFrame(intersections_dict,crs=input_gdf.crs)
     else:
         return MultiPoint(intersections_dict['geometry'])
+    
+
+def total_area(input_gdf):
+    prj_crs = input_gdf.estimate_utm_crs()
+    return sum(input_gdf.to_crs(prj_crs).geometry.area)
+
+def total_perimeter(input_gdf):
+    prj_crs = input_gdf.estimate_utm_crs()
+    return sum(input_gdf.to_crs(prj_crs).geometry.length)
