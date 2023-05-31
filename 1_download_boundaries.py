@@ -30,7 +30,7 @@ city_row = city_boundaries[city_boundaries['name'] == correspondence]
 # In[5]:
 
 
-gdf_to_file(city_row,CITY_SHORTNAME+'.geojson')
+gdf_to_file(city_row,CITY_SHORTNAME+'EXTENSION')
 
 
 # In[6]:
@@ -39,5 +39,5 @@ gdf_to_file(city_row,CITY_SHORTNAME+'.geojson')
 for key in NEIGHBORHOODS:
     neigh_boundaries = features_from_place(NEIGHBORHOODS[key],{'admin_level':'10'})
     correspondence = most_similar_string_in_df(neigh_boundaries,'name',key)
-    save_gdf_row_by_match(neigh_boundaries,'name',correspondence,key+'.geojson')
+    save_gdf_row_by_match(neigh_boundaries,'name',correspondence,key+'EXTENSION')
 

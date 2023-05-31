@@ -1,10 +1,16 @@
 {
     "agua_verde": {
         "area": 4761295.440805461,
-        "perimeter": 9759.377156657225
+        "perimeter": 9759.377156657225,
+        "roads_length": 94802.10191130063,
+        "number_of_blocks": 277,
+        "sidewalks_length": 137216.26846480704
     },
     "jardim_das_americas": {
         "area": 3874277.9117809543,
-        "perimeter": 8847.357165162291
+        "perimeter": 8847.357165162291,
+        "roads_length": 64618.45547429878,
+        "number_of_blocks": 190,
+        "sidewalks_length": 94161.41568137857
     }
 }

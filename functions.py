@@ -1,5 +1,6 @@
 import osmnx as ox
 import geopandas as gpd
+import pandas as pd
 import json, shutil, os
 import Levenshtein
 from shapely.ops import unary_union
@@ -100,6 +101,15 @@ def total_area(input_gdf):
     prj_crs = input_gdf.estimate_utm_crs()
     return sum(input_gdf.to_crs(prj_crs).geometry.area)
 
-def total_perimeter(input_gdf):
+def total_perimeter_or_len(input_gdf):
+    '''
+    Returns the geopandas "length", 
+    that shall be the total length for linear 
+    geometries or perimeter for areas
+    '''
     prj_crs = input_gdf.estimate_utm_crs()
     return sum(input_gdf.to_crs(prj_crs).geometry.length)
+
+
+def df_element_count(input_gdf):
+    return input_gdf.shape[0]
