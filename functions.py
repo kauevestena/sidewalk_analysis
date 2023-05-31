@@ -113,3 +113,16 @@ def total_perimeter_or_len(input_gdf):
 
 def df_element_count(input_gdf):
     return input_gdf.shape[0]
+
+def gdf_areas_description(input_gdf,preffix=None):
+    prj_crs = input_gdf.estimate_utm_crs()
+    as_dict = input_gdf.to_crs(prj_crs).geometry.area.describe().to_dict()
+
+    if preffix:
+        as_dict = {f'{preffix}_{key}': value for key, value in as_dict.items()}
+
+    return as_dict
+
+
+
+

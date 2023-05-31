@@ -1,5 +1,5 @@
 '''
-    file containing constants in order to ease the process of reproduce te analysis undertaken
+    file containing constants in order to ease the process to reproduce the analysis
 '''
 
 CITY_SHORTNAME = 'curitba' #without spaces or uppercase characters
@@ -8,9 +8,14 @@ CITY_DESCRIPTION = 'Curitiba, Brazil'
 # Key, description for Nominatim
 NEIGHBORHOODS = {'agua_verde':'Água Verde, Curitiba','jardim_das_americas':'Jardim das Américas, Curitiba'}
 
+
+# less variable constants:
+
 highway_values = ['motorway','trunk','primary','secondary','tertiary','unclassified','residential','living_street']
 
-sidewalks_dict = {'footway':['sidewalk','crossing'],'barrier':['kerb'],'kerb':True}
+sidewalks_dict = {'footway':['sidewalk','crossing']}
+
+kerbs_dict = {'barrier':['kerb'],'kerb':True}
 
 EXTENSION = '.geojson'
 
@@ -19,6 +24,8 @@ streets_suffix = '_streets'+EXTENSION
 blocks_suffix = '_protoblocks'+EXTENSION
 
 sidewalks_suffix = '_sidewalks'+EXTENSION
+
+kerbs_suffix = '_kerbs'+EXTENSION
 
 splitted_suffix = '_splitted'+EXTENSION
 

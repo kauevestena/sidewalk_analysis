@@ -18,7 +18,7 @@ for key in NEIGHBORHOODS:
 
     #protoblocks statistics
     protoblocks_gdf = gpd.read_file(key+blocks_suffix)
-    characteristics[key]['number_of_blocks'] = df_element_count(protoblocks_gdf)
+    characteristics[key].update(gdf_areas_description(protoblocks_gdf,'blocks'))
 
     # sideawalks statistics
     sidewalks_gdf = gpd.read_file(key+sidewalks_suffix)
