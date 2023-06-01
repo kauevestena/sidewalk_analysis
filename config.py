@@ -25,6 +25,8 @@ blocks_suffix = '_protoblocks'+EXTENSION
 
 sidewalks_suffix = '_sidewalks'+EXTENSION
 
+pol_sidewalks_suffix = '_sidewalk_polygons'+EXTENSION
+
 kerbs_suffix = '_kerbs'+EXTENSION
 
 splitted_suffix = '_splitted'+EXTENSION

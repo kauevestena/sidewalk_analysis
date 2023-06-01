@@ -20,6 +20,10 @@ $PYTHONPATH 5_download_sidewalks.py
 
 $PYTHONPATH 6_download_kerbs.py
 
+$PYTHONPATH 7_polygonized_sidewalks.py
+
 # Analysis
 
-$PYTHONPATH A0_neighbourhood_analysis.py
+$PYTHONPATH A1_neighbourhood_analysis.py
+
+$PYTHONPATH A2_neighbourhood_analysis.py
