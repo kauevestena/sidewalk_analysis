@@ -24,6 +24,6 @@ $PYTHONPATH 7_polygonized_sidewalks.py
 
 # Analysis
 
-$PYTHONPATH A1_neighbourhood_analysis.py
+$PYTHONPATH A1_blocks_analysis.py
 
 $PYTHONPATH A2_neighbourhood_analysis.py
