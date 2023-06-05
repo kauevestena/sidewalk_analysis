@@ -123,6 +123,16 @@ def gdf_areas_description(input_gdf,preffix=None):
 
     return as_dict
 
+def normalized_perimeter_area_ratio(inputgeom):
+    '''
+         calculates the normalized ratio between perimeter and areas
+    '''
+
+    return inputgeom.area/inputgeom.length
 
 
+def project_to_estimate_utm(input_gdf):
+    return input_gdf.to_crs(input_gdf.estimate_utm_crs())
 
+def apply_func_on_estimate_utm(inout_gdf,func,outcolumnname,inputcolum='geometry'):
+    inout_gdf[outcolumnname] = inout_gdf.to_crs(inout_gdf.estimate_utm_crs())[inputcolum].apply(func)
