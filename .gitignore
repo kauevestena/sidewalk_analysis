@@ -129,6 +129,7 @@ dmypy.json
 .pyre/
 
 #tests
+tests/
 tests.py
 
 # OSMNX cache

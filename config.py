@@ -8,6 +8,11 @@ CITY_DESCRIPTION = 'Curitiba, Brazil'
 # Key, description for Nominatim
 NEIGHBORHOODS = {'agua_verde':'Água Verde, Curitiba','jardim_das_americas':'Jardim das Américas, Curitiba'}
 
+# cutoff threshold for non-blocks
+block_ratio_cutoff = 5
+
+# extra tests available on some scripts
+EXTRA_TESTS = False
 
 # less variable constants:
 
@@ -34,3 +39,5 @@ splitted_suffix = '_splitted'+EXTENSION
 intersections_suffix = '_intersections'+EXTENSION
 
 neighborhoods_descriptive_statistics_path = 'neighborhoods_descriptive.json'
+
+normalized_ratio_fieldname = 'norm_p_a_ratio'

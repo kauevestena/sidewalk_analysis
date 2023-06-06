@@ -1,3 +1,4 @@
+import math
 import osmnx as ox
 import geopandas as gpd
 import pandas as pd
@@ -128,11 +129,11 @@ def normalized_perimeter_area_ratio(inputgeom):
          calculates the normalized ratio between perimeter and areas
     '''
 
-    return inputgeom.area/inputgeom.length
+    return inputgeom.length / math.sqrt(inputgeom.area)
 
 
 def project_to_estimate_utm(input_gdf):
     return input_gdf.to_crs(input_gdf.estimate_utm_crs())
 
-def apply_func_on_estimate_utm(inout_gdf,func,outcolumnname,inputcolum='geometry'):
+def apply_func_on_estimate_utm(inout_gdf:gpd.GeoDataFrame,func,outcolumnname:str,inputcolum='geometry'):
     inout_gdf[outcolumnname] = inout_gdf.to_crs(inout_gdf.estimate_utm_crs())[inputcolum].apply(func)
