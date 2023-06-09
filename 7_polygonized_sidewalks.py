@@ -21,8 +21,10 @@ for key in NEIGHBORHOODS:
     sidewalk_blocks_gdf = multigeom_to_gdf(sidewalk_blocks,as_gdf.crs)
 
     # sidewalk_blocks_gdf['ḿin_clearance'] = sidewalk_blocks_gdf['geometry'].apply(minimum_clearance)
-    apply_func_on_estimate_utm(sidewalk_blocks_gdf,minimum_clearance,'ḿin_clearance')
+    apply_func_on_estimate_utm(sidewalk_blocks_gdf,minimum_clearance,'min_clearance')
     apply_func_on_estimate_utm(sidewalk_blocks_gdf,normalized_perimeter_area_ratio,normalized_ratio_fieldname)
+    apply_func_on_estimate_utm(sidewalk_blocks_gdf,azimuth_std,az_std_fieldname)
+
 
 
     sidewalk_blocks_gdf.to_file(key+pol_sidewalks_suffix)

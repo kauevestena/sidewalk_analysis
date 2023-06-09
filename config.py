@@ -12,7 +12,7 @@ NEIGHBORHOODS = {'agua_verde':'Água Verde, Curitiba','jardim_das_americas':'Jar
 block_ratio_cutoff = 5
 
 # extra tests available on some scripts
-EXTRA_TESTS = False
+EXTRA_TESTS = True
 
 # less variable constants:
 
@@ -41,3 +41,5 @@ intersections_suffix = '_intersections'+EXTENSION
 neighborhoods_descriptive_statistics_path = 'neighborhoods_descriptive.json'
 
 normalized_ratio_fieldname = 'norm_p_a_ratio'
+az_std_fieldname = 'azimuth_std'
+

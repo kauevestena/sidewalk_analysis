@@ -5,6 +5,10 @@ import pandas as pd
 import json, shutil, os
 import Levenshtein
 from shapely.ops import unary_union
+from shapely._geometry import get_exterior_ring
+from shapely.geometry import LineString, Polygon, LinearRing, Point
+from math import atan2, degrees
+import numpy as np
 
 
 def features_from_place(place_name, tags):
@@ -137,3 +141,37 @@ def project_to_estimate_utm(input_gdf):
 
 def apply_func_on_estimate_utm(inout_gdf:gpd.GeoDataFrame,func,outcolumnname:str,inputcolum='geometry'):
     inout_gdf[outcolumnname] = inout_gdf.to_crs(inout_gdf.estimate_utm_crs())[inputcolum].apply(func)
+
+def centroids_difference(p1,p2):
+    return LineString([p1,p2]).length
+
+
+def calculate_azimuth(point1, point2):
+    dx = point2.x - point1.x
+    dy = point2.y - point1.y
+    azimuth = atan2(dy, dx)
+    return degrees(azimuth) % 360
+
+def azimuth_std(polygon):
+    
+    if isinstance(polygon,Polygon):
+        as_linearring = get_exterior_ring(polygon)
+    if isinstance(polygon,LinearRing):
+        as_linearring = polygon
+
+    prev_coords = None
+    azimuth_list = []
+    for coord in (as_linearring.coords):
+        as_point = Point(*coord)
+
+        if prev_coords:
+            azimuth_list.append(calculate_azimuth(as_point, prev_coords))
+
+        prev_coords=as_point
+
+    return np.array(azimuth_list).std()
+
+def read_gdf_in_local_utm(inputpath):
+    gdf = gpd.read_file(inputpath)
+
+    return gdf.to_crs(gdf.estimate_utm_crs())

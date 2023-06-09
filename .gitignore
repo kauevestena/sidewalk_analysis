@@ -130,6 +130,7 @@ dmypy.json
 
 #tests
 tests/
+bkp/
 tests.py
 
 # OSMNX cache
