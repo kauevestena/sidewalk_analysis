@@ -5,7 +5,7 @@ import pandas as pd
 import json, shutil, os
 import Levenshtein
 from shapely.ops import unary_union
-from shapely._geometry import get_exterior_ring
+from shapely._geometry import get_exterior_ring, get_interior_ring
 from shapely.geometry import LineString, Polygon, LinearRing, Point
 from math import atan2, degrees
 import numpy as np

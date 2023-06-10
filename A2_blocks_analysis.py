@@ -10,6 +10,7 @@ extra_columns = {
 for key in NEIGHBORHOODS:
     # reading the protoblocks:
     blocks_gdf = read_gdf_in_local_utm(key+blocks_suffix)
+    working_crs = blocks_gdf.crs
 
     # reading sidewalks as blocks:
     polyg_sidewalks_gdf = read_gdf_in_local_utm(key+pol_sidewalks_suffix)
@@ -36,11 +37,38 @@ for key in NEIGHBORHOODS:
         centroid_distance = 0
 
         if EXTRA_TESTS:
-            contained_sidewalks.to_file(os.path.join('tests',f'{entry.Index}_{contained_sidewalks.shape[0]}.geojson'))
+            contained_sidewalks.to_file(os.path.join('tests',f'{key}_{entry.Index}_{contained_sidewalks.shape[0]}.geojson'))
 
-        print('\n',contained_sidewalks_n)
+        # print('\n',contained_sidewalks_n)
 
-        as_unary = unary_union_from_gdf(contained_sidewalks)
+        pol_sidewalks_unary = unary_union_from_gdf(contained_sidewalks)
+
+        linestring_sidewalks_unary = get_exterior_ring(pol_sidewalks_unary)
+
+        # print(linestring_sidewalks_unary)
+
+        contained_streets_index = splitted_roads_gdf.geometry.within(block_geom.buffer(1))
+
+        contained_streets = splitted_roads_gdf[contained_streets_index]
+
+        if linestring_sidewalks_unary:
+            buffs = []
+            for road_stretch in contained_streets.itertuples():
+                stretch_geom = road_stretch.geometry
+
+                distance = stretch_geom.distance(linestring_sidewalks_unary)
+
+                buffs.append(stretch_geom.buffer(distance))
+
+            merged_buffs = unary_union(buffs)
+
+            if EXTRA_TESTS:
+                as_dict = {'name':['buff'],'geometry':[merged_buffs]}
+                buffs_gdf = gpd.GeoDataFrame(as_dict,crs=working_crs)
+                buffs_gdf.to_file(os.path.join('tests',f'{int(merged_buffs.area)}_buff_{key}_{entry.Index}.geojson'))
+
+            reconstructed_sidewalk = get_interior_ring(merged_buffs,0)
+
 
         # contained roads 
 

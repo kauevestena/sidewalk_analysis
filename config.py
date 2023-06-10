@@ -12,7 +12,7 @@ NEIGHBORHOODS = {'agua_verde':'Água Verde, Curitiba','jardim_das_americas':'Jar
 block_ratio_cutoff = 5
 
 # extra tests available on some scripts
-EXTRA_TESTS = True
+EXTRA_TESTS = False
 
 # less variable constants:
 
