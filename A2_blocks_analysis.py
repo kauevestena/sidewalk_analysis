@@ -1,7 +1,15 @@
 from functions import *
 from config import *
 
-extra_columns = {
+
+
+resulting_gdfs = []
+
+reconstructed_sidewalks = []
+
+for key in NEIGHBORHOODS:
+
+    extra_columns = {
     'contained_sidewalks': [],
     'ratio_unary_sidewalk': [],
     'ratio_reconstructed_sidewalk': [],
@@ -11,13 +19,8 @@ extra_columns = {
     'hausd_fretch_diff' : [],
     'contained_sidewalks_ids':[],
     # 'centroid_distance': [],
-}
+    }
 
-resulting_gdfs = []
-
-reconstructed_sidewalks = []
-
-for key in NEIGHBORHOODS:
     # reading the protoblocks:
     blocks_gdf = read_gdf_in_local_utm(key+blocks_suffix)
     working_crs = blocks_gdf.crs
@@ -30,7 +33,7 @@ for key in NEIGHBORHOODS:
 
     # iterating over the blocks, to find the sidewalk polygon it belongs 
     for entry in blocks_gdf.itertuples():
-        print(entry.Index,key)
+        # print(entry.Index,key)
 
         block_geom = entry.geometry
 
@@ -43,13 +46,15 @@ for key in NEIGHBORHOODS:
 
         contained_sidewalks = polyg_sidewalks_gdf[contained_sidewalks_index]
 
+
+
         contained_sidewalks_ids = df_index_to_str(contained_sidewalks,f'_{key}')
+        # print(contained_sidewalks_ids)
 
         contained_sidewalks_n = contained_sidewalks.shape[0]
-        ratio_unary_sidewalk = 0
-        ratio_unary_sidewalk = 0
-        ratio_reconstructed_sidewalk = 0
-        ratio_diff = 0
+        ratio_unary_sidewalk = None
+        ratio_reconstructed_sidewalk = None
+        ratio_diff = None
         hausdorf_d = None
         frechet_d = None
         hausd_fretch_diff = None
@@ -69,6 +74,10 @@ for key in NEIGHBORHOODS:
         pol_sidewalks_unary = unary_union_from_gdf(contained_sidewalks)
 
         linestring_sidewalks_unary = get_exterior_ring(pol_sidewalks_unary)
+
+        if contained_sidewalks_n > 1:
+            print(pol_sidewalks_unary)
+            print(linestring_sidewalks_unary)
 
         # print(linestring_sidewalks_unary)
 
@@ -124,6 +133,8 @@ for key in NEIGHBORHOODS:
 
             hausd_fretch_diff = hausdorf_d - frechet_d
 
+            ratio_diff = ratio_reconstructed_sidewalk-ratio_unary_sidewalk
+
 
         
         # print(contained_sidewalks_n)
@@ -141,7 +152,7 @@ for key in NEIGHBORHOODS:
 
         extra_columns['ratio_reconstructed_sidewalk'].append(ratio_reconstructed_sidewalk)
 
-        extra_columns['diff_norm_ratio'].append(ratio_reconstructed_sidewalk-ratio_unary_sidewalk)
+        extra_columns['diff_norm_ratio'].append(ratio_diff)
         # extra_columns['centroid_distance'].append(centroid_distance)
 
         extra_columns['contained_sidewalks_ids'].append(contained_sidewalks_ids)
@@ -153,6 +164,8 @@ for key in NEIGHBORHOODS:
     expanded_blocks_gdf.to_file(key+blocks_with_analysis_suffix)
 
     resulting_gdfs.append(expanded_blocks_gdf)
+
+    dump_json(extra_columns,f'{key}_extra_cols.json')
 
 
 gpd.GeoDataFrame(pd.concat(resulting_gdfs, ignore_index=True), crs=working_crs).to_file('all_neighborhoods_block_analysis.geojson')

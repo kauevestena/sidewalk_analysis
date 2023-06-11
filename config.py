@@ -12,7 +12,7 @@ NEIGHBORHOODS = {'agua_verde':'Água Verde, Curitiba','jardim_das_americas':'Jar
 block_ratio_cutoff = 5
 
 # extra tests available on some scripts
-EXTRA_TESTS = True
+EXTRA_TESTS = False
 
 # less variable constants:
 
@@ -45,3 +45,12 @@ blocks_with_analysis_suffix = '_blocks_analysis'+EXTENSION
 normalized_ratio_fieldname = 'norm_p_a_ratio'
 az_std_fieldname = 'azimuth_std'
 
+
+
+
+###################################
+import os
+if not os.path.exists('tests'):
+    os.makedirs('tests')
+if not os.path.exists('tests.py'):
+    os.makedirs('tests.py')

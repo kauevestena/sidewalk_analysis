@@ -1,9 +1,9 @@
 import math
-import osmnx as ox
+# import osmnx as ox
 import geopandas as gpd
 import pandas as pd
 import json, shutil, os
-import Levenshtein
+# import Levenshtein
 from shapely.ops import unary_union
 from shapely.measurement import hausdorff_distance, frechet_distance
 from shapely._geometry import get_exterior_ring, get_interior_ring
@@ -196,3 +196,7 @@ def feature_list_to_gdf(input_feature_list,crs='EPSG:4326',filepath=None):
 def df_index_to_str(input_df,suffix=''):
     if not input_df.empty:
         return "_".join(list(map(str,list(input_df.index))))+suffix
+    
+def create_folder_if_not_exists(folderpath):
+    if not os.path.exists(folderpath):
+        os.makedirs(folderpath)
