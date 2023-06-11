@@ -5,6 +5,7 @@ import pandas as pd
 import json, shutil, os
 import Levenshtein
 from shapely.ops import unary_union
+from shapely.measurement import hausdorff_distance, frechet_distance
 from shapely._geometry import get_exterior_ring, get_interior_ring
 from shapely.geometry import LineString, Polygon, LinearRing, Point
 from math import atan2, degrees
@@ -133,7 +134,7 @@ def normalized_perimeter_area_ratio(inputgeom):
          calculates the normalized ratio between perimeter and areas
     '''
 
-    return inputgeom.length / math.sqrt(inputgeom.area)
+    return (inputgeom.length*inputgeom.length) / inputgeom.area
 
 
 def project_to_estimate_utm(input_gdf):
@@ -175,3 +176,23 @@ def read_gdf_in_local_utm(inputpath):
     gdf = gpd.read_file(inputpath)
 
     return gdf.to_crs(gdf.estimate_utm_crs())
+
+def feature_list_to_gdf(input_feature_list,crs='EPSG:4326',filepath=None):
+    ids = [i[0] for i in enumerate(input_feature_list)]
+
+    as_dict = {
+        'ids' : ids,
+        'geometry' : input_feature_list,
+    }
+
+    as_gdf = gpd.GeoDataFrame(as_dict,crs=crs)
+
+    if filepath:
+        as_gdf.to_file(filepath)
+
+    return as_gdf    
+
+
+def df_index_to_str(input_df,suffix=''):
+    if not input_df.empty:
+        return "_".join(list(map(str,list(input_df.index))))+suffix
