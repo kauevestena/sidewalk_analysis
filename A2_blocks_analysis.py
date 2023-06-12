@@ -18,6 +18,8 @@ for key in NEIGHBORHOODS:
     'frechet_distance' :[],
     'hausd_fretch_diff' : [],
     'contained_sidewalks_ids':[],
+    'area_diff':[],
+    'area_diff_perc':[],
     # 'centroid_distance': [],
     }
 
@@ -33,7 +35,7 @@ for key in NEIGHBORHOODS:
 
     # iterating over the blocks, to find the sidewalk polygon it belongs 
     for entry in blocks_gdf.itertuples():
-        # print(entry.Index,key)
+        print(entry.Index,key)
 
         block_geom = entry.geometry
 
@@ -58,6 +60,8 @@ for key in NEIGHBORHOODS:
         hausdorf_d = None
         frechet_d = None
         hausd_fretch_diff = None
+        area_diff = None
+        area_diff_perc = None
 
         diff_ratio = 0
         centroid_distance = 0
@@ -76,8 +80,7 @@ for key in NEIGHBORHOODS:
         linestring_sidewalks_unary = get_exterior_ring(pol_sidewalks_unary)
 
         if contained_sidewalks_n > 1:
-            print(pol_sidewalks_unary)
-            print(linestring_sidewalks_unary)
+            linestring_sidewalks_unary = exterior_ring_multipolygon(pol_sidewalks_unary)
 
         # print(linestring_sidewalks_unary)
 
@@ -103,7 +106,7 @@ for key in NEIGHBORHOODS:
 
             rec_sidewalk_line = get_interior_ring(merged_buffs,0)
 
-            reconstructed_sidewalk = Polygon(rec_sidewalk_line)
+            reconstructed_sidewalk = Polygon(rec_sidewalk_line).buffer(-curve_radius).buffer(curve_radius)
 
             reconstructed_sidewalks.append(reconstructed_sidewalk)
 
@@ -133,7 +136,15 @@ for key in NEIGHBORHOODS:
 
             hausd_fretch_diff = hausdorf_d - frechet_d
 
-            ratio_diff = ratio_reconstructed_sidewalk-ratio_unary_sidewalk
+            if ratio_reconstructed_sidewalk and ratio_unary_sidewalk:
+                ratio_diff = ratio_reconstructed_sidewalk-ratio_unary_sidewalk
+
+            area_diff_perc = calc_perc(reconstructed_sidewalk.area,pol_sidewalks_unary.area)
+
+            if area_diff_perc < 150 and area_diff_perc > 50:
+                area_diff =  reconstructed_sidewalk.area - pol_sidewalks_unary.area
+
+
 
 
         
@@ -157,6 +168,10 @@ for key in NEIGHBORHOODS:
 
         extra_columns['contained_sidewalks_ids'].append(contained_sidewalks_ids)
 
+        extra_columns['area_diff'].append(area_diff)
+        extra_columns['area_diff_perc'].append(area_diff_perc)
+
+
     extra_columns_df = pd.DataFrame(extra_columns)
 
     expanded_blocks_gdf = blocks_gdf.join(extra_columns_df)
@@ -165,7 +180,7 @@ for key in NEIGHBORHOODS:
 
     resulting_gdfs.append(expanded_blocks_gdf)
 
-    dump_json(extra_columns,f'{key}_extra_cols.json')
+    # dump_json(extra_columns,f'{key}_extra_cols.json')
 
 
 gpd.GeoDataFrame(pd.concat(resulting_gdfs, ignore_index=True), crs=working_crs).to_file('all_neighborhoods_block_analysis.geojson')

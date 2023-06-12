@@ -11,8 +11,14 @@ NEIGHBORHOODS = {'agua_verde':'Água Verde, Curitiba','jardim_das_americas':'Jar
 # cutoff threshold for non-blocks
 block_ratio_cutoff = 5
 
+# curve radius for sidewalk "reconstruction"
+curve_radius = 3
+
 # extra tests available on some scripts
-EXTRA_TESTS = False
+EXTRA_TESTS = True
+
+# minimum polygonized area in m2
+min_sidewalk_block = 100
 
 # less variable constants:
 

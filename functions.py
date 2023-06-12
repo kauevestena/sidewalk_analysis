@@ -1,13 +1,12 @@
-import math
-# import osmnx as ox
+import osmnx as ox
 import geopandas as gpd
 import pandas as pd
 import json, shutil, os
-# import Levenshtein
+import Levenshtein
 from shapely.ops import unary_union
 from shapely.measurement import hausdorff_distance, frechet_distance
-from shapely._geometry import get_exterior_ring, get_interior_ring
-from shapely.geometry import LineString, Polygon, LinearRing, Point
+from shapely._geometry import get_exterior_ring, get_interior_ring,get_num_geometries, get_parts 
+from shapely.geometry import LineString, Polygon, LinearRing, Point, MultiLineString
 from math import atan2, degrees
 import numpy as np
 
@@ -129,12 +128,13 @@ def gdf_areas_description(input_gdf,preffix=None):
 
     return as_dict
 
-def normalized_perimeter_area_ratio(inputgeom):
+def normalized_perimeter_area_ratio(inputgeom,tol=0.000000001):
     '''
          calculates the normalized ratio between perimeter and areas
     '''
 
-    return (inputgeom.length*inputgeom.length) / inputgeom.area
+    if inputgeom.area > tol:
+        return (inputgeom.length*inputgeom.length) / inputgeom.area
 
 
 def project_to_estimate_utm(input_gdf):
@@ -200,3 +200,13 @@ def df_index_to_str(input_df,suffix=''):
 def create_folder_if_not_exists(folderpath):
     if not os.path.exists(folderpath):
         os.makedirs(folderpath)
+
+def exterior_ring_multipolygon(input_multipolygon):
+    return MultiLineString([get_exterior_ring(geom) for geom in get_parts(input_multipolygon)])
+
+def calc_perc(ref_val,val,min_val=0.000001):
+    if ref_val > min_val:
+        return val/ref_val*100
+    
+def geom_area(inputpolygon):
+    return inputpolygon.area
