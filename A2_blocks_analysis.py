@@ -10,16 +10,20 @@ reconstructed_sidewalks = []
 for key in NEIGHBORHOODS:
 
     extra_columns = {
-    'contained_sidewalks': [],
+    'contained_pol_sidewalks': [],
     'ratio_unary_sidewalk': [],
     'ratio_reconstructed_sidewalk': [],
     'diff_norm_ratio': [],
     'hausdorff_distance':[],
     'frechet_distance' :[],
     'hausd_fretch_diff' : [],
-    'contained_sidewalks_ids':[],
+    'contained_pol_sidewalks_ids':[],
     'area_diff':[],
     'area_diff_perc':[],
+    'neighborhood':[],
+    'condition':[],
+    'perimeter_diff':[],
+    'perimeter_diff_perc':[],
     # 'centroid_distance': [],
     }
 
@@ -31,7 +35,12 @@ for key in NEIGHBORHOODS:
     polyg_sidewalks_gdf = read_gdf_in_local_utm(key+pol_sidewalks_suffix)
 
     # reading splitted roads:
-    splitted_roads_gdf = read_gdf_in_local_utm(key+splitted_suffix)    
+    splitted_roads_gdf = read_gdf_in_local_utm(key+splitted_suffix) 
+
+    # reading original sidewalks:
+    sidewalks_gdf  = read_gdf_in_local_utm(key+sidewalks_suffix)
+    
+    sidewalks_gdf  = sidewalks_gdf.loc[sidewalks_gdf['footway']=='sidewalk']
 
     # iterating over the blocks, to find the sidewalk polygon it belongs 
     for entry in blocks_gdf.itertuples():
@@ -44,16 +53,20 @@ for key in NEIGHBORHOODS:
         # getting as linestring to use distance measurement
         # block_as_linestring = get_exterior_ring(block_geom)
 
-        contained_sidewalks_index = polyg_sidewalks_gdf.geometry.within(block_geom.buffer(1))
+        contained_pol_sidewalks_index = polyg_sidewalks_gdf.geometry.within(block_geom)
 
-        contained_sidewalks = polyg_sidewalks_gdf[contained_sidewalks_index]
+        contained_pol_sidewalks = polyg_sidewalks_gdf[contained_pol_sidewalks_index]
 
 
+        contained_sidewalks_index = sidewalks_gdf.geometry.within(block_geom)
 
-        contained_sidewalks_ids = df_index_to_str(contained_sidewalks,f'_{key}')
-        # print(contained_sidewalks_ids)
+        contained_sidewalks = sidewalks_gdf[contained_sidewalks_index]
 
-        contained_sidewalks_n = contained_sidewalks.shape[0]
+
+        contained_pol_sidewalks_ids = df_index_to_str(contained_pol_sidewalks,f'_{key}')
+        # print(contained_pol_sidewalks_ids)
+
+        contained_pol_sidewalks_n = contained_pol_sidewalks.shape[0]
         ratio_unary_sidewalk = None
         ratio_reconstructed_sidewalk = None
         ratio_diff = None
@@ -62,25 +75,29 @@ for key in NEIGHBORHOODS:
         hausd_fretch_diff = None
         area_diff = None
         area_diff_perc = None
+        condition = ''
+        perimeter_diff = None
+        perimeter_diff_perc = None
 
         diff_ratio = 0
         centroid_distance = 0
 
-        # contained_sidewalks_ids = ''
+        # contained_pol_sidewalks_ids = ''
 
         if EXTRA_TESTS:
-            contained_sidewalks.to_file(os.path.join('tests',f'{key}_{entry.Index}_{contained_sidewalks.shape[0]}.geojson'))
+            contained_pol_sidewalks.to_file(os.path.join('tests',f'{key}_{entry.Index}_{contained_pol_sidewalks.shape[0]}.geojson'))
 
         # print(entry.Index)
 
-        # print('\n',contained_sidewalks_n)
+        # print('\n',contained_pol_sidewalks_n)
 
-        pol_sidewalks_unary = unary_union_from_gdf(contained_sidewalks)
+        pol_sidewalks_unary = unary_union_from_gdf(contained_pol_sidewalks)
 
         linestring_sidewalks_unary = get_exterior_ring(pol_sidewalks_unary)
 
-        if contained_sidewalks_n > 1:
+        if contained_pol_sidewalks_n > 1:
             linestring_sidewalks_unary = exterior_ring_multipolygon(pol_sidewalks_unary)
+
 
         # print(linestring_sidewalks_unary)
 
@@ -89,6 +106,13 @@ for key in NEIGHBORHOODS:
         contained_streets = splitted_roads_gdf[contained_streets_index]
 
         if linestring_sidewalks_unary:
+            if contained_pol_sidewalks_n > 1:
+                condition = 'Closed Multi'
+            else:
+                condition = 'Closed'
+
+
+
             buffs = []
             for road_stretch in contained_streets.itertuples():
                 stretch_geom = road_stretch.geometry
@@ -114,22 +138,6 @@ for key in NEIGHBORHOODS:
 
             ratio_unary_sidewalk = normalized_perimeter_area_ratio(pol_sidewalks_unary)
             
-            
-            # contained roads 
-
-            # if not contained_sidewalks.empty:
-            
-
-            # for each in contained_sidewalks.itertuples():
-            #     sidewalk_pol_geom = each.geometry
-            #     sidewalk_as_linestring = get_exterior_ring(sidewalk_pol_geom)
-
-            #     sidewalk_pol_centroid = sidewalk_pol_geom.centroid
-
-            # centroid_distance += centroids_difference(block_centroid,sidewalk_pol_centroid)
-
-            #     distance_block_sidewalk = block_as_linestring.distance(sidewalk_as_linestring)
-
             hausdorf_d = hausdorff_distance(linestring_sidewalks_unary,rec_sidewalk_line,densify=.05)
 
             frechet_d = frechet_distance(linestring_sidewalks_unary,rec_sidewalk_line,densify=.05)
@@ -144,11 +152,23 @@ for key in NEIGHBORHOODS:
             if area_diff_perc < 150 and area_diff_perc > 50:
                 area_diff =  reconstructed_sidewalk.area - pol_sidewalks_unary.area
 
+            perimeter_diff_perc = calc_perc(reconstructed_sidewalk.length,pol_sidewalks_unary.length)
+
+            if perimeter_diff_perc < 150 and perimeter_diff_perc > 50:
+                perimeter_diff =  reconstructed_sidewalk.length - pol_sidewalks_unary.length
+            
+
+        else:
+            if contained_sidewalks.empty:
+                condition = 'Without S.'
+            else:
+                condition = 'Unclosed'
+
 
 
 
         
-        # print(contained_sidewalks_n)
+        # print(contained_pol_sidewalks_n)
         extra_columns['hausdorff_distance'].append(hausdorf_d)
 
 
@@ -156,7 +176,7 @@ for key in NEIGHBORHOODS:
 
         extra_columns['hausd_fretch_diff'].append(hausd_fretch_diff)
 
-        extra_columns['contained_sidewalks'].append(contained_sidewalks_n)
+        extra_columns['contained_pol_sidewalks'].append(contained_pol_sidewalks_n)
         
 
         extra_columns['ratio_unary_sidewalk'].append(ratio_unary_sidewalk)
@@ -166,10 +186,19 @@ for key in NEIGHBORHOODS:
         extra_columns['diff_norm_ratio'].append(ratio_diff)
         # extra_columns['centroid_distance'].append(centroid_distance)
 
-        extra_columns['contained_sidewalks_ids'].append(contained_sidewalks_ids)
+        extra_columns['contained_pol_sidewalks_ids'].append(contained_pol_sidewalks_ids)
 
         extra_columns['area_diff'].append(area_diff)
         extra_columns['area_diff_perc'].append(area_diff_perc)
+
+        extra_columns['neighborhood'].append(NEIGHBORHOODS[key])
+
+        extra_columns['condition'].append(condition)
+
+        extra_columns['perimeter_diff'].append(perimeter_diff)
+        extra_columns['perimeter_diff_perc'].append(perimeter_diff_perc)
+
+
 
 
     extra_columns_df = pd.DataFrame(extra_columns)
