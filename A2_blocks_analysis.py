@@ -23,6 +23,7 @@ for key in NEIGHBORHOODS:
     'neighborhood':[],
     'condition':[],
     'perimeter_diff':[],
+    'perimeter_diff_abs':[],
     'perimeter_diff_perc':[],
     # 'centroid_distance': [],
     }
@@ -78,6 +79,7 @@ for key in NEIGHBORHOODS:
         condition = ''
         perimeter_diff = None
         perimeter_diff_perc = None
+        perimeter_diff_abs = None
 
         diff_ratio = 0
         centroid_distance = 0
@@ -156,6 +158,7 @@ for key in NEIGHBORHOODS:
 
             if perimeter_diff_perc < 150 and perimeter_diff_perc > 50:
                 perimeter_diff =  reconstructed_sidewalk.length - pol_sidewalks_unary.length
+                perimeter_diff_abs = abs(perimeter_diff)
             
 
         else:
@@ -196,6 +199,7 @@ for key in NEIGHBORHOODS:
         extra_columns['condition'].append(condition)
 
         extra_columns['perimeter_diff'].append(perimeter_diff)
+        extra_columns['perimeter_diff_abs'].append(perimeter_diff_abs)
         extra_columns['perimeter_diff_perc'].append(perimeter_diff_perc)
 
 
