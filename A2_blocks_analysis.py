@@ -156,9 +156,9 @@ for key in NEIGHBORHOODS:
 
             perimeter_diff_perc = calc_perc(reconstructed_sidewalk.length,pol_sidewalks_unary.length)
 
-            if perimeter_diff_perc < 150 and perimeter_diff_perc > 50:
-                perimeter_diff =  reconstructed_sidewalk.length - pol_sidewalks_unary.length
-                perimeter_diff_abs = abs(perimeter_diff)
+            # if perimeter_diff_perc < 150 and perimeter_diff_perc > 50:
+            perimeter_diff =  reconstructed_sidewalk.length - pol_sidewalks_unary.length
+            perimeter_diff_abs = abs(perimeter_diff)
             
 
         else:
