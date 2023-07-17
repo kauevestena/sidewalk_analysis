@@ -210,3 +210,16 @@ def calc_perc(ref_val,val,min_val=0.000001):
     
 def geom_area(inputpolygon):
     return inputpolygon.area
+
+def plotly_doublechart():
+    import plotly.express as px #yes, importing inside 
+
+    fig = px.histogram(df, x="total_bill", y="tip", color="sex",
+                   marginal="box", # or violin, rug
+                    #hover_data=df.columns
+                   )
+    
+    fig.write_image(outpath)
+
+    
+
