@@ -158,7 +158,9 @@ for key in NEIGHBORHOODS:
 
             # if perimeter_diff_perc < 150 and perimeter_diff_perc > 50:
             perimeter_diff =  reconstructed_sidewalk.length - pol_sidewalks_unary.length
-            perimeter_diff_abs = abs(perimeter_diff)
+
+            if condition == 'Closed':
+                perimeter_diff_abs = abs(perimeter_diff)
             
 
         else:
