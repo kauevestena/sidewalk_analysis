@@ -7,7 +7,7 @@ from shapely.ops import unary_union
 from shapely.measurement import hausdorff_distance, frechet_distance
 from shapely._geometry import get_exterior_ring, get_interior_ring,get_num_geometries, get_parts 
 from shapely.geometry import LineString, Polygon, LinearRing, Point, MultiLineString
-from math import atan2, degrees
+from math import atan2, degrees, pi
 import numpy as np
 
 
@@ -135,6 +135,10 @@ def normalized_perimeter_area_ratio(inputgeom,tol=0.000000001):
 
     if inputgeom.area > tol:
         return (inputgeom.length*inputgeom.length) / inputgeom.area
+
+def isoperimetric_quotient(inputgeom,tol=0.000000001):
+    if inputgeom.area > tol:
+        return 4*pi* ((inputgeom.area)/(inputgeom.length*inputgeom.length))
 
 
 def project_to_estimate_utm(input_gdf):

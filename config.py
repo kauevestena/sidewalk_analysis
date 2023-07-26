@@ -18,7 +18,7 @@ curve_radius = 3
 EXTRA_TESTS = True
 
 # minimum polygonized area in m2
-min_sidewalk_block = 100
+min_sidewalk_block_area = 100
 
 # less variable constants:
 
@@ -49,6 +49,7 @@ neighborhoods_descriptive_statistics_path = 'neighborhoods_descriptive.json'
 blocks_with_analysis_suffix = '_blocks_analysis'+EXTENSION
 
 normalized_ratio_fieldname = 'norm_p_a_ratio'
+isoperimetric_ratio_fieldname = 'isoperimetric_ratio'
 az_std_fieldname = 'azimuth_std'
 
 

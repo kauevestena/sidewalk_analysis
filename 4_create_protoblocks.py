@@ -12,7 +12,7 @@ for key in NEIGHBORHOODS:
 
     protoblocks_gdf = multigeom_to_gdf(proto_blocks,as_gdf.crs)
 
-    apply_func_on_estimate_utm(protoblocks_gdf,normalized_perimeter_area_ratio,'norm_p_a_ratio')
+    apply_func_on_estimate_utm(protoblocks_gdf,normalized_perimeter_area_ratio,'norm_p_a_ratio_protoblock')
 
     protoblocks_gdf.to_file(key+blocks_suffix)
     

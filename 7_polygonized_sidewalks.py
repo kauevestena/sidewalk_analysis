@@ -25,9 +25,11 @@ for key in NEIGHBORHOODS:
     apply_func_on_estimate_utm(sidewalk_blocks_gdf,normalized_perimeter_area_ratio,normalized_ratio_fieldname)
     apply_func_on_estimate_utm(sidewalk_blocks_gdf,azimuth_std,az_std_fieldname)
     apply_func_on_estimate_utm(sidewalk_blocks_gdf,geom_area,'area')
+    apply_func_on_estimate_utm(sidewalk_blocks_gdf,geom_area,isoperimetric_ratio_fieldname)
+
 
     # filtering out small polygons that may occur by defect
-    sidewalk_blocks_gdf = sidewalk_blocks_gdf.loc[sidewalk_blocks_gdf['area']>min_sidewalk_block]
+    sidewalk_blocks_gdf = sidewalk_blocks_gdf.loc[sidewalk_blocks_gdf['area']>min_sidewalk_block_area]
     
 
 

@@ -25,6 +25,9 @@ for key in NEIGHBORHOODS:
     'perimeter_diff':[],
     'perimeter_diff_abs':[],
     'perimeter_diff_perc':[],
+    'isoperimetric_unary_sidewalk' : [],
+    'isoperimetric_reconstructed_sidewalk' : [],
+    'isoperimetric_diff' : [],
     # 'centroid_distance': [],
     }
 
@@ -80,6 +83,11 @@ for key in NEIGHBORHOODS:
         perimeter_diff = None
         perimeter_diff_perc = None
         perimeter_diff_abs = None
+
+
+        isoperimetric_unary_sidewalk = None
+        isoperimetric_reconstructed_sidewalk = None
+        isoperimetric_diff = None
 
         diff_ratio = 0
         centroid_distance = 0
@@ -140,14 +148,26 @@ for key in NEIGHBORHOODS:
 
             ratio_unary_sidewalk = normalized_perimeter_area_ratio(pol_sidewalks_unary)
             
+            if ratio_reconstructed_sidewalk and ratio_unary_sidewalk:
+                ratio_diff = ratio_reconstructed_sidewalk-ratio_unary_sidewalk
+
+            isoperimetric_unary_sidewalk = isoperimetric_quotient(pol_sidewalks_unary)
+            isoperimetric_reconstructed_sidewalk = isoperimetric_quotient(reconstructed_sidewalk)
+
+            if isoperimetric_unary_sidewalk and isoperimetric_reconstructed_sidewalk:
+
+                isoperimetric_diff = isoperimetric_reconstructed_sidewalk - isoperimetric_unary_sidewalk
+
+            
+
+
             hausdorf_d = hausdorff_distance(linestring_sidewalks_unary,rec_sidewalk_line,densify=.05)
 
             frechet_d = frechet_distance(linestring_sidewalks_unary,rec_sidewalk_line,densify=.05)
 
             hausd_fretch_diff = hausdorf_d - frechet_d
 
-            if ratio_reconstructed_sidewalk and ratio_unary_sidewalk:
-                ratio_diff = ratio_reconstructed_sidewalk-ratio_unary_sidewalk
+
 
             area_diff_perc = calc_perc(reconstructed_sidewalk.area,pol_sidewalks_unary.area)
 
@@ -190,6 +210,10 @@ for key in NEIGHBORHOODS:
 
         extra_columns['diff_norm_ratio'].append(ratio_diff)
         # extra_columns['centroid_distance'].append(centroid_distance)
+
+        extra_columns['isoperimetric_unary_sidewalk'].append(isoperimetric_unary_sidewalk)
+        extra_columns['isoperimetric_reconstructed_sidewalk'].append(isoperimetric_reconstructed_sidewalk)
+        extra_columns['isoperimetric_diff'].append(isoperimetric_diff)
 
         extra_columns['contained_pol_sidewalks_ids'].append(contained_pol_sidewalks_ids)
 
