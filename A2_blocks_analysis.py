@@ -244,8 +244,7 @@ for key in NEIGHBORHOODS:
 
 gpd.GeoDataFrame(pd.concat(resulting_gdfs, ignore_index=True), crs=working_crs).to_file('all_neighborhoods_block_analysis.geojson')
 
-if EXTRA_TESTS:
-    feature_list_to_gdf(reconstructed_sidewalks,working_crs,os.path.join('tests','reconstructed_sidewalks.geojson'))
+feature_list_to_gdf(reconstructed_sidewalks,working_crs,'reconstructed_sidewalks.geojson')
 
         
 
