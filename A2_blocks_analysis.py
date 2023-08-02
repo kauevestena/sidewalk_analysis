@@ -28,6 +28,10 @@ for key in NEIGHBORHOODS:
     'isoperimetric_unary_sidewalk' : [],
     'isoperimetric_reconstructed_sidewalk' : [],
     'isoperimetric_diff' : [],
+
+    'mean_gradient_unary':[],
+    'mean_gradient_reconstructed':[],
+
     # 'centroid_distance': [],
     }
 
@@ -91,6 +95,9 @@ for key in NEIGHBORHOODS:
 
         diff_ratio = 0
         centroid_distance = 0
+
+        # mean_gradient_unary = None
+        # mean_gradient_reconstructed = None
 
         # contained_pol_sidewalks_ids = ''
 
@@ -181,7 +188,10 @@ for key in NEIGHBORHOODS:
 
             if condition == 'Closed':
                 perimeter_diff_abs = abs(perimeter_diff)
-            
+
+                mean_gradient_unary = mean_gradient(pol_sidewalks_unary)
+                mean_gradient_reconstructed = mean_gradient(reconstructed_sidewalk)
+                
 
         else:
             if contained_sidewalks.empty:
@@ -228,6 +238,8 @@ for key in NEIGHBORHOODS:
         extra_columns['perimeter_diff_abs'].append(perimeter_diff_abs)
         extra_columns['perimeter_diff_perc'].append(perimeter_diff_perc)
 
+        extra_columns['mean_gradient_unary'].append(mean_gradient_unary)
+        extra_columns['mean_gradient_reconstructed'].append(mean_gradient_reconstructed)
 
 
 

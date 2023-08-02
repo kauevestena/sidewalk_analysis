@@ -215,15 +215,27 @@ def calc_perc(ref_val,val,min_val=0.000001):
 def geom_area(inputpolygon):
     return inputpolygon.area
 
-def plotly_doublechart():
-    import plotly.express as px #yes, importing inside 
+# def plotly_doublechart():
+#     import plotly.express as px #yes, importing inside 
 
-    fig = px.histogram(df, x="total_bill", y="tip", color="sex",
-                   marginal="box", # or violin, rug
-                    #hover_data=df.columns
-                   )
+#     fig = px.histogram(df, x="total_bill", y="tip", color="sex",
+#                    marginal="box", # or violin, rug
+#                     #hover_data=df.columns
+#                    )
     
-    fig.write_image(outpath)
+#     fig.write_image(outpath)
+
+
+def geom_as_np(geom):
+    if geom.geom_type == 'Polygon':
+        return np.array(geom.boundary.coords)
+
+def mean_gradient(geom):
+    if geom.geom_type == 'Polygon':
+
+        as_arr = np.array(geom_as_np(geom))
+
+        return np.mean(np.diff(as_arr[:,0])/np.diff(as_arr[:,1]))
 
     
 
