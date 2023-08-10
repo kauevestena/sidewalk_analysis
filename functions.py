@@ -138,7 +138,7 @@ def normalized_perimeter_area_ratio(inputgeom,tol=0.000000001):
 
 def isoperimetric_quotient(inputgeom,tol=0.000000001):
     if inputgeom.area > tol:
-        return 4*pi* ((inputgeom.area)/(inputgeom.length*inputgeom.length))
+        return 1/(4*pi* ((inputgeom.area)/(inputgeom.length*inputgeom.length)))
 
 
 def project_to_estimate_utm(input_gdf):
