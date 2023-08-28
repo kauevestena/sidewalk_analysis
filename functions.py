@@ -138,7 +138,8 @@ def normalized_perimeter_area_ratio(inputgeom,tol=0.000000001):
     '''
 
     if inputgeom.area > tol:
-        return  inputgeom.area / ((inputgeom.length/4)**2) 
+        # return  inputgeom.area / ((inputgeom.length/4)**2) 
+        return (inputgeom.length**2) / inputgeom.area
 
 def isoperimetric_quotient(inputgeom,tol=0.000000001):
     if inputgeom.area > tol:
