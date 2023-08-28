@@ -84,7 +84,7 @@ def multigeom_to_gdf(inputgeom,crs,outfilepath=None):
     return as_gdf
 
 
-def find_intersections(input_gdf,return_gdf = True):
+def find_intersections(input_gdf,dissolve_with_count = False):
 
     intersections_dict = {'names':[],'geometry':[]}
 
@@ -96,10 +96,14 @@ def find_intersections(input_gdf,return_gdf = True):
                     intersections_dict['names'].append(f'{i} {j} ')
                     intersections_dict['geometry'].append(intersec)
 
-    if return_gdf:
-        return gpd.GeoDataFrame(intersections_dict,crs=input_gdf.crs)
+
+    ret_gdf = gpd.GeoDataFrame(intersections_dict,crs=input_gdf.crs)
+
+    if dissolve_with_count:
+        return dissolve_points_with_count(ret_gdf)
     else:
-        return MultiPoint(intersections_dict['geometry'])
+        return ret_gdf
+
     
 
 def total_area(input_gdf):
@@ -237,5 +241,19 @@ def mean_gradient(geom):
 
         return np.mean(np.diff(as_arr[:,0])/np.diff(as_arr[:,1]))
 
-    
+ 
+def dissolve_points_with_count(gdf):
+    from collections import defaultdict
+
+    dissolved_dict = defaultdict(lambda: {'geometry': None, 'count': 0})
+
+    for idx, row in gdf.iterrows():
+        geom = row['geometry']
+        dissolved_dict[geom]['geometry'] = geom
+        dissolved_dict[geom]['count'] += 1
+
+    dissolved_data = list(dissolved_dict.values())
+    dissolved_gdf = gpd.GeoDataFrame(dissolved_data)
+
+    return dissolved_gdf
 
