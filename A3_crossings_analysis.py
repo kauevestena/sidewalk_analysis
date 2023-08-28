@@ -33,7 +33,7 @@ for key in NEIGHBORHOODS:
 
         number_kerbs.append(kerbs_small_buf.intersects(geom).sum())
 
-        number_sidewalks.append(only_sidewalks.intersects(geom.buffer(.2)).sum())
+        number_sidewalks.append(only_sidewalks.intersects(geom).sum())
 
     only_crossings['number_kerbs'] = number_kerbs
     only_crossings['number_sidewalks'] = number_sidewalks
