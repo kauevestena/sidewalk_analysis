@@ -135,3 +135,4 @@ tests.py
 
 # OSMNX cache
 cache
+*.ods#
