@@ -7,12 +7,12 @@ all_neighborhoods = []
 for key in NEIGHBORHOODS:
     filepath = key+sidewalks_suffix
 
-    all_data = read_gdf_in_local_utm(filepath)
+    footway_data = read_gdf_in_local_utm(filepath)
 
-    all_data['neighborhood'] = key
+    footway_data['neighborhood'] = key
 
-    only_crossings = all_data.loc[all_data['footway'] == 'crossing'].copy()
-    only_sidewalks = all_data.loc[all_data['footway'] == 'sidewalk'].copy()
+    only_crossings = footway_data.loc[footway_data['footway'] == 'crossing'].copy()
+    only_sidewalks = footway_data.loc[footway_data['footway'] == 'sidewalk'].copy()
 
 
     # reading additional data:
@@ -41,18 +41,39 @@ for key in NEIGHBORHOODS:
     all_neighborhoods.append(only_crossings)
 
 
-all_data = gpd.GeoDataFrame(pd.concat(all_neighborhoods, ignore_index=True), crs=all_data.crs)
-all_data.to_file('all_neighborhoods_crossing_analysis.geojson')
-
-all_data.geometry = all_data.geometry.centroid
-
-all_data.to_file('all_neighborhoods_crossing_analysis_centroids.geojson')
+all_crossings = gpd.GeoDataFrame(pd.concat(all_neighborhoods, ignore_index=True), crs=footway_data.crs)
+all_crossings.to_file('all_neighborhoods_crossing_analysis.geojson')
 
 
-    
 
-    
 
+# counting how many crossings we have per block:
+all_blocks = read_gdf_in_local_utm('all_neighborhoods_block_analysis.geojson')
+
+crossings_count = []
+crossings_boolean = []
+
+for i,btuple in enumerate(all_blocks.itertuples()):
+    n_crossings = all_crossings.intersects(btuple.geometry).sum()
+
+    crossings_count.append(n_crossings)
+
+    if n_crossings == 0:
+        crossings_boolean.append(False)
+    else:
+        crossings_boolean.append(True)
+
+all_blocks['number_crossings'] = crossings_count
+all_blocks['has_crossings'] = crossings_boolean
+
+# rewriting: 
+all_blocks.to_file('all_neighborhoods_block_analysis.geojson')
+
+
+# exporting as centroids to facilitate the representation
+all_crossings.geometry = all_crossings.geometry.centroid
+
+all_crossings.to_file('all_neighborhoods_crossing_analysis_centroids.geojson')
 
 
 
