@@ -3,3 +3,4 @@ Levenshtein
 shapely>2.0
 plotly
 kaleido
+tqdm
