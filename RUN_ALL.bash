@@ -29,3 +29,5 @@ $PYTHONPATH A1_blocks_analysis.py
 $PYTHONPATH A2_neighbourhood_analysis.py
 
 $PYTHONPATH A3_crossings_analysis.py
+
+$PYTHONPATH A3_crossings_analysis.py
