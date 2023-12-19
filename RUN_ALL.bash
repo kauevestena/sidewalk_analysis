@@ -31,3 +31,5 @@ $PYTHONPATH A2_neighbourhood_analysis.py
 $PYTHONPATH A3_crossings_analysis.py
 
 $PYTHONPATH A3_crossings_analysis.py
+
+$PYTHONPATH A4_lineage_analysis.py
