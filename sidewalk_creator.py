@@ -38,8 +38,13 @@ class SidewalkCreator:
                 if not i == j:
                     if line.intersects(line2):
                         intersec = line.intersection(line2)
-                        intersections_dict['names'].append(f'{i}_{j}')
-                        intersections_dict['geometry'].append(intersec)
+                        if intersec.geom_type == 'Point':
+                            intersections_dict['names'].append(f'{i}_{j}')
+                            intersections_dict['geometry'].append(intersec)
+                        elif intersec.geom_type == 'MultiPoint':
+                            for p in intersec.geoms:
+                                intersections_dict['names'].append(f'{i}_{j}')
+                                intersections_dict['geometry'].append(p)
 
         if return_gdf:
             return gpd.GeoDataFrame(intersections_dict, crs=self.proj_epsg)
