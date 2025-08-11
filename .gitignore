@@ -136,3 +136,5 @@ tests.py
 # OSMNX cache
 cache
 *.ods#
+
+differences_experiment/*.png
