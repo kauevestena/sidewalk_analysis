@@ -76,7 +76,7 @@ def main():
                     print(i, cityname, category)
                     print()
                     outpath_file = os.path.join(outfiles_folderpath, f"{cityname}_{category}.geojson")
-                    current_gdf = ox.geometries_from_address(cityname, filters[category], dist=10000)
+                    current_gdf = ox.geometries.geometries_from_place(cityname, filters[category])
                     data[cityname][category] = calc_len_sum(current_gdf)
                     dump_json(data, outpath)
                     # current_gdf.to_file(outpath_file, driver='GeoJSON') # Disabling to avoid large files
