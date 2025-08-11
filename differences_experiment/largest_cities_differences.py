@@ -2,6 +2,7 @@ from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+
 from wordcloud import WordCloud
 
 # Sample data for demonstration purposes
@@ -37,6 +38,7 @@ def build_dataframe(names: list[str], metrics: dict[str, dict[str, float]]) -> p
     """Construct a DataFrame containing metrics for the given cities."""
     rows = []
     for city in tqdm(names, desc="Processing cities"):
+
         if city in metrics:
             row = {"city": city}
             row.update(metrics[city])
