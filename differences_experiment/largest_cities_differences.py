@@ -1,7 +1,8 @@
 from pathlib import Path
-import json
 import pandas as pd
 import matplotlib.pyplot as plt
+from tqdm import tqdm
+
 from wordcloud import WordCloud
 
 # Sample data for demonstration purposes
@@ -36,7 +37,8 @@ def load_city_names(csv_path: Path) -> list[str]:
 def build_dataframe(names: list[str], metrics: dict[str, dict[str, float]]) -> pd.DataFrame:
     """Construct a DataFrame containing metrics for the given cities."""
     rows = []
-    for city in names:
+    for city in tqdm(names, desc="Processing cities"):
+
         if city in metrics:
             row = {"city": city}
             row.update(metrics[city])
@@ -71,8 +73,9 @@ def main() -> None:
     boxplot_path = base_dir / "lengths_boxplot.png"
     wordcloud_path = base_dir / "sidewalk_wordcloud.png"
 
-    save_boxplot(df, boxplot_path)
-    save_wordcloud(df, wordcloud_path)
+    tasks = [(save_boxplot, boxplot_path), (save_wordcloud, wordcloud_path)]
+    for func, path in tqdm(tasks, desc="Generating charts"):
+        func(df, path)
 
     print(f"Saved boxplot to {boxplot_path}")
     print(f"Saved word cloud to {wordcloud_path}")
