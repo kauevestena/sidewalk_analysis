@@ -3,47 +3,83 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
+import osmnx as ox
 from wordcloud import WordCloud
-
-# Sample data for demonstration purposes
-DATA_SAMPLE = {
-    "Tokyo": {
-        "car_len": 8332.788314397883,
-        "footway_len": 3390.8064492946273,
-        "sidewalk_len": 1920.057358071414,
-        "with_sidewalk": 292.7343003084041,
-    },
-    "Delhi": {
-        "car_len": 6630.787824393951,
-        "footway_len": 249.04426524784097,
-        "sidewalk_len": 27.31638405980001,
-        "with_sidewalk": 34.80184147390246,
-    },
-    "Shanghai": {
-        "car_len": 3037.269177363178,
-        "footway_len": 448.3296173033003,
-        "sidewalk_len": 56.49890597846692,
-        "with_sidewalk": 29.803722922282184,
-    },
-}
 
 
 def load_city_names(csv_path: Path) -> list[str]:
     """Load list of city names from the provided CSV file."""
     df = pd.read_csv(csv_path)
-    return df["Name"].tolist()
+    # Only use the top 1000 cities
+    return df["Name"].head(1000).tolist()
 
 
-def build_dataframe(names: list[str], metrics: dict[str, dict[str, float]]) -> pd.DataFrame:
+def _has_footway(highway: object) -> bool:
+    """Return True if the highway attribute represents a footway."""
+    if isinstance(highway, list):
+        return "footway" in highway
+    return highway == "footway"
+
+
+def compute_city_metrics(city: str) -> dict[str, float]:
+    """Compute network/feature lengths for a single city in kilometers."""
+    metrics = {
+        "car_len": 0.0,
+        "footway_len": 0.0,
+        "sidewalk_len": 0.0,
+        "with_sidewalk": 0.0,
+    }
+
+    try:
+        g_drive = ox.graph_from_place(city, network_type="drive")
+        metrics["car_len"] = (
+            sum(d.get("length", 0.0) for _, _, d in g_drive.edges(data=True)) / 1000
+        )
+        metrics["with_sidewalk"] = (
+            sum(
+                d.get("length", 0.0)
+                for _, _, d in g_drive.edges(data=True)
+                if d.get("sidewalk") and d.get("sidewalk") != "no"
+            )
+            / 1000
+        )
+    except Exception:
+        pass
+
+    try:
+        g_walk = ox.graph_from_place(city, network_type="walk")
+        metrics["footway_len"] = (
+            sum(
+                d.get("length", 0.0)
+                for _, _, d in g_walk.edges(data=True)
+                if _has_footway(d.get("highway"))
+            )
+            / 1000
+        )
+    except Exception:
+        pass
+
+    try:
+        gdf_sidewalk = ox.geometries_from_place(city, tags={"highway": "sidewalk"})
+        if not gdf_sidewalk.empty:
+            metrics["sidewalk_len"] = gdf_sidewalk.geometry.length.sum() / 1000
+    except Exception:
+        pass
+
+    return metrics
+
+
+def build_dataframe(names: list[str]) -> pd.DataFrame:
     """Construct a DataFrame containing metrics for the given cities."""
-    rows = []
+    rows: list[dict[str, float]] = []
     for city in tqdm(names, desc="Processing cities"):
-
-        if city in metrics:
-            row = {"city": city}
-            row.update(metrics[city])
-            rows.append(row)
-    return pd.DataFrame(rows)
+        row = {"city": city}
+        row.update(compute_city_metrics(city))
+        rows.append(row)
+    return pd.DataFrame(
+        rows,
+        columns=["city", "car_len", "footway_len", "sidewalk_len", "with_sidewalk"],
+    )
 
 
 def save_boxplot(df: pd.DataFrame, out_path: Path) -> None:
@@ -68,7 +104,7 @@ def main() -> None:
     csv_path = base_dir.parent / "prototypes" / "biggest_cities.csv"
 
     city_names = load_city_names(csv_path)
-    df = build_dataframe(city_names, DATA_SAMPLE)
+    df = build_dataframe(city_names)
 
     boxplot_path = base_dir / "lengths_boxplot.png"
     wordcloud_path = base_dir / "sidewalk_wordcloud.png"
