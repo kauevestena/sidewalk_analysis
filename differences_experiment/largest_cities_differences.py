@@ -60,7 +60,7 @@ def compute_city_metrics(city: str) -> dict[str, float]:
         pass
 
     try:
-        gdf_sidewalk = ox.geometries_from_place(city, tags={"highway": "sidewalk"})
+        gdf_sidewalk = ox.features_from_place(city, tags={"highway": "sidewalk"})
         if not gdf_sidewalk.empty:
             metrics["sidewalk_len"] = gdf_sidewalk.geometry.length.sum() / 1000
     except Exception:

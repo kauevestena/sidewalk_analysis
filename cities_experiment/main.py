@@ -2,7 +2,7 @@ import os
 import json
 import osmnx as ox
 import pandas as pd
-from shapely.geometry import LineString
+from shapely.geometry import LineString, MultiLineString
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 
@@ -18,20 +18,24 @@ def dump_json(inputdict, outputpath):
 def calc_len_sum(inputdf):
     if inputdf.empty:
         return 0
-    sum = 0
+    length_sum = 0
     new_crs = inputdf.estimate_utm_crs()
-    for geom in inputdf.to_crs(new_crs)['geometry']:
-        if isinstance(geom, LineString):
-            sum += geom.length
-    return sum / 1000
+    for geom in inputdf.to_crs(new_crs)["geometry"]:
+        if isinstance(geom, (LineString, MultiLineString)):
+            length_sum += geom.length
+    return length_sum / 1000
 
 def generate_boxplot(data, output_folder):
+    df = pd.DataFrame(data).T.select_dtypes(include="number")
+    if df.empty:
+        print("No numeric data available to plot.")
+        return
     fig, ax = plt.subplots(figsize=(15, 10))
-    df = pd.DataFrame(data).T
-    df.plot(kind='box', ax=ax)
+    df.plot(kind="box", ax=ax)
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig(os.path.join(output_folder, 'cities_boxplot.png'))
+    plt.savefig(os.path.join(output_folder, "cities_boxplot.png"))
+    plt.close()
 
 def generate_wordcloud(data, output_folder):
     with_sidewalk_data = {city: data[city].get('with_sidewalk', 0) for city in data}
@@ -76,7 +80,7 @@ def main():
                     print(i, cityname, category)
                     print()
                     outpath_file = os.path.join(outfiles_folderpath, f"{cityname}_{category}.geojson")
-                    current_gdf = ox.geometries_from_place(cityname, filters[category])
+                    current_gdf = ox.features_from_place(cityname, tags=filters[category])
                     data[cityname][category] = calc_len_sum(current_gdf)
                     dump_json(data, outpath)
                     # current_gdf.to_file(outpath_file, driver='GeoJSON') # Disabling to avoid large files
