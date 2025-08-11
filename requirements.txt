@@ -1,4 +1,4 @@
-osmnx
+osmnx>=2.0.6
 Levenshtein
 shapely>2.0
 plotly
