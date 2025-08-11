@@ -10,18 +10,15 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.13
+      - name: Set up Python 3.12
         uses: actions/setup-python@v3
         with:
-          python-version: '3.13'
+          python-version: '3.12'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install geopandas wordcloud
-      - name: Debug osmnx
-        run: |
-          python -c "import osmnx; print(osmnx.__dict__)"
       - name: Run script
         run: |
           python cities_experiment/main.py
