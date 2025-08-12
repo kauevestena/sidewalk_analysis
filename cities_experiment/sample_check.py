@@ -3,17 +3,18 @@ import osmnx as ox
 import pandas as pd
 from cities_experiment.functions import read_json, dump_json, calc_len_sum, generate_boxplot, generate_wordcloud
 
-
 def main():
     csvpath = "cities_experiment/biggest_cities.csv"
-    outpath = "cities_experiment/biggest_cities_23set2022.json"
-    outfiles_folderpath = "cities_experiment/geojsons"
-    output_folder = "cities_experiment"
+    output_folder = "cities_experiment/sample_check"
+    outpath = os.path.join(output_folder, "biggest_cities_sample.json")
+    outfiles_folderpath = os.path.join(output_folder, "geojsons")
 
     if not os.path.exists(outfiles_folderpath):
         os.makedirs(outfiles_folderpath)
 
     cities_df = pd.read_csv(csvpath)
+    cities_df = cities_df[(cities_df['rank'] >= 996) & (cities_df['rank'] <= 1000)]
+
 
     if not os.path.exists(outpath):
         data = {}
@@ -29,8 +30,6 @@ def main():
 
     for i, cityname in enumerate(cities_df['Name']):
         try:
-            if i > 20: # Limiting to 20 cities for testing purposes
-                break
             if not cityname in data:
                 data[cityname] = {}
             for category in filters:

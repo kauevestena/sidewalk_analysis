@@ -1,4 +1,4 @@
-name: Cities Experiment
+name: Cities Experiment Sample
 
 on:
   workflow_dispatch:
@@ -21,9 +21,9 @@ jobs:
           pip install geopandas wordcloud
       - name: Run script
         run: |
-          python cities_experiment/main.py
+          python cities_experiment/sample_check.py
       - name: Commit files
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "Add generated images"
-          file_pattern: cities_experiment/*.png
+          commit_message: "Add generated images from sample check"
+          file_pattern: cities_experiment/sample_check/*.png
