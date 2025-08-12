@@ -21,7 +21,7 @@ jobs:
           pip install geopandas wordcloud
       - name: Run script
         run: |
-          python cities_experiment/sample_check.py
+          python -m cities_experiment.sample_check
       - name: Commit files
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
