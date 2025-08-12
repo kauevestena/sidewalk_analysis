@@ -1,8 +1,0 @@
-pandas
-matplotlib
-wordcloud
-tqdm
-pytest
-networkx>=3.5
-osmnx>=2.0.6
-

@@ -12,7 +12,7 @@ import numpy as np
 
 
 def features_from_place(place_name, tags):
-    features = ox.features_from_place(place_name, tags=tags)
+    features = ox.geometries.geometries_from_place(place_name, tags=tags)
     return features
 
 
