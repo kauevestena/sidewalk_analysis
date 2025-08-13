@@ -1,7 +1,20 @@
 import os
 import osmnx as ox
 import pandas as pd
-from cities_experiment.functions import read_json, dump_json, calc_len_sum, generate_boxplot, generate_wordcloud
+
+# from cities_experiment.functions import read_json, dump_json, calc_len_sum, generate_boxplot, generate_wordcloud
+
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from functions import (
+    read_json,
+    dump_json,
+    calc_len_sum,
+    generate_boxplot,
+    generate_word,
+)
+
 
 def main():
     csvpath = "cities_experiment/biggest_cities.csv"
@@ -20,15 +33,24 @@ def main():
         data = read_json(outpath)
 
     filters = {
-        'car_len': {'highway': ['motorway', 'trunk', 'primary', 'tertiary', 'unclassified', 'residential']},
-        'footway_len': {'highway': ['footway', 'path']},
-        'sidewalk_len': {'footway': ['sidewalk', 'crossing']},
-        'with_sidewalk': {'sidewalk': True}
+        "car_len": {
+            "highway": [
+                "motorway",
+                "trunk",
+                "primary",
+                "tertiary",
+                "unclassified",
+                "residential",
+            ]
+        },
+        "footway_len": {"highway": ["footway", "path"]},
+        "sidewalk_len": {"footway": ["sidewalk", "crossing"]},
+        "with_sidewalk": {"sidewalk": True},
     }
 
-    for i, cityname in enumerate(cities_df['Name']):
+    for i, cityname in enumerate(cities_df["Name"]):
         try:
-            if i > 20: # Limiting to 20 cities for testing purposes
+            if i > 20:  # Limiting to 20 cities for testing purposes
                 break
             if not cityname in data:
                 data[cityname] = {}
@@ -37,7 +59,9 @@ def main():
                 if not category in data[cityname]:
                     print(i, cityname, category)
                     print()
-                    outpath_file = os.path.join(outfiles_folderpath, f"{cityname}_{category}.geojson")
+                    outpath_file = os.path.join(
+                        outfiles_folderpath, f"{cityname}_{category}.geojson"
+                    )
                     current_gdf = ox.features_from_place(cityname, filters[category])
                     data[cityname][category] = calc_len_sum(current_gdf)
                     dump_json(data, outpath)
@@ -53,5 +77,6 @@ def main():
     generate_boxplot(data, output_folder)
     generate_wordcloud(data, output_folder)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
