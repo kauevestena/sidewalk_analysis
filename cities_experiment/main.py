@@ -50,6 +50,7 @@ def main():
 
     for i, cityname in enumerate(cities_df["Name"]):
         try:
+            sums = {}
             if i > 20:  # Limiting to 20 cities for testing purposes
                 break
             if not cityname in data:
@@ -63,9 +64,12 @@ def main():
                         outfiles_folderpath, f"{cityname}_{category}.geojson"
                     )
                     current_gdf = ox.features_from_place(cityname, filters[category])
-                    data[cityname][category] = calc_len_sum(current_gdf)
+                    sum = calc_len_sum(current_gdf)
+                    data[cityname][category] = sum
+                    sums[category] = sum
                     dump_json(data, outpath)
-                    # current_gdf.to_file(outpath_file, driver='GeoJSON') # Disabling to avoid large files
+            print(f"Processed {cityname}: {sums}")
+            # current_gdf.to_file(outpath_file, driver='GeoJSON') # Disabling to avoid large files
         except Exception as e:
             print(f"Error processing {cityname}: {e}")
             if cityname in data:
