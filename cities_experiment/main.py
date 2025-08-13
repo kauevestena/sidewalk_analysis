@@ -12,7 +12,7 @@ from functions import (
     dump_json,
     calc_len_sum,
     generate_boxplot,
-    generate_word,
+    generate_wordcloud,
 )
 
 
