@@ -35,8 +35,18 @@ def generate_boxplot(data, output_folder):
 
 def generate_wordcloud(data, output_folder):
     with_sidewalk_data = {city: data[city].get('with_sidewalk', 0) for city in data}
+    total_sidewalks = sum(with_sidewalk_data.values())
+    if total_sidewalks == 0:
+        plt.figure(figsize=(15, 10))
+        plt.text(0.5, 0.5, 'No sidewalk data available', ha='center', va='center', fontsize=20)
+        plt.axis('off')
+        plt.savefig(os.path.join(output_folder, 'sidewalk_wordcloud.png'))
+        plt.close()
+        return
     wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(with_sidewalk_data)
     plt.figure(figsize=(15, 10))
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis('off')
     plt.savefig(os.path.join(output_folder, 'sidewalk_wordcloud.png'))
+    plt.close()
+
