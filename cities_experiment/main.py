@@ -19,7 +19,7 @@ from functions import (
 def main():
     ox.settings.timeout = 3600
     csvpath = "cities_experiment/biggest_cities.csv"
-    outpath = "cities_experiment/biggest_cities_23set2022.json"
+    outpath = "cities_experiment/data.json"
     outfiles_folderpath = "cities_experiment/geojsons"
     output_folder = "cities_experiment"
 
@@ -52,7 +52,7 @@ def main():
     for i, cityname in enumerate(cities_df["Name"]):
         try:
             sums = {}
-            if i > 20:  # Limiting to 20 cities for testing purposes
+            if i > 1000: 
                 break
             if not cityname in data:
                 data[cityname] = {}
