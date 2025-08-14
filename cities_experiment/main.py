@@ -17,6 +17,7 @@ from functions import (
 
 
 def main():
+    ox.settings.timeout = 3600
     csvpath = "cities_experiment/biggest_cities.csv"
     outpath = "cities_experiment/biggest_cities_23set2022.json"
     outfiles_folderpath = "cities_experiment/geojsons"
