@@ -4,6 +4,7 @@ import pandas as pd
 from cities_experiment.functions import read_json, dump_json, calc_len_sum, generate_boxplot, generate_wordcloud
 
 def main():
+    ox.settings.timeout = 3600
     csvpath = "cities_experiment/biggest_cities.csv"
     outpath = "cities_experiment/biggest_cities_23set2022.json"
     outfiles_folderpath = "cities_experiment/geojsons"
