@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Run chart generator with CSV",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/cities_experiment/chart_generation.py",
+      "console": "integratedTerminal",
+      "args": [
+        "--csv",
+        "cities_experiment/city_network_lengths.csv"
+      ],
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    }
+  ]
+}
