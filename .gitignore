@@ -139,3 +139,4 @@ cache
 
 # Local OSM PBF extracts
 *.osm.pbf
+.vscode/settings.json
