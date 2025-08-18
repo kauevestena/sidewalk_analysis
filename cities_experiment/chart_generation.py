@@ -166,6 +166,19 @@ def charts(df: pd.DataFrame, outdir: str):
     fig_box.update_layout(xaxis_title="", yaxis_title="km")
     save_fig(fig_box, os.path.join(outdir, "01_box_lengths.png"))
 
+    # 01-Cropped Boxplot (basics)
+    fig_box = px.box(
+        long,
+        x="metric",
+        y="km",
+        # points="all",
+        hover_data=["city", "country_code"],
+        range_y=[0, 10000],  # Crop y-axis to show only up to 10,000 km
+        title="Distribution of network lengths (km)",
+    )
+    fig_box.update_layout(xaxis_title="", yaxis_title="km")
+    save_fig(fig_box, os.path.join(outdir, "01B_box_lengths_cropped.png"))
+
     # 02 Violin
     fig_violin = px.violin(
         long,
