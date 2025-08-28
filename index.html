@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cities Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+        .maplibregl-popup {
+            max-width: 400px;
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+<script>
+    const citiesData = {
+      "type": "FeatureCollection",
+      "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.45806,
+          31.22222
+        ]
+      },
+      "properties": {
+        "rank": 1,
+        "city": "Shanghai",
+        "country_code": "CN",
+        "lat": 31.22222,
+        "lon": 121.45806,
+        "population": 24874500,
+        "radius_m": 30000,
+        "car_len_m": 14302915.66,
+        "footway_len_m": 1666039.33,
+        "sidewalk_len_m": 457725.97,
+        "with_sidewalk_len_m": 114337.39,
+        "car_len_km": 14302.91566,
+        "footway_len_km": 1666.03933,
+        "sidewalk_len_km": 457.72596999999996,
+        "with_sidewalk_len_km": 114.33739,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 5.058621617589953,
+        "foot_density_km_per_km2": 0.5892408772333544,
+        "sidewalk_density_km_per_km2": 0.161887446015628,
+        "with_sidewalk_density_km_per_km2": 0.0404385795527241,
+        "pop_k": 24874.5,
+        "car_km_per_1k": 0.5750031421737121,
+        "foot_km_per_1k": 0.0669778017648596,
+        "foot_to_car_ratio": 0.11648249696803428,
+        "sidewalk_share_of_foot": 0.2747389943069351,
+        "roads_with_sidewalk_share": 0.007993991764893061
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.39723,
+          39.9075
+        ]
+      },
+      "properties": {
+        "rank": 2,
+        "city": "Beijing",
+        "country_code": "CN",
+        "lat": 39.9075,
+        "lon": 116.39723,
+        "population": 18960744,
+        "radius_m": 30000,
+        "car_len_m": 16876608.85,
+        "footway_len_m": 3716029.22,
+        "sidewalk_len_m": 480143.97,
+        "with_sidewalk_len_m": 218140.31,
+        "car_len_km": 16876.60885,
+        "footway_len_km": 3716.0292200000004,
+        "sidewalk_len_km": 480.14396999999997,
+        "with_sidewalk_len_km": 218.14031,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 5.9688793802353945,
+        "foot_density_km_per_km2": 1.3142764867487118,
+        "sidewalk_density_km_per_km2": 0.1698161916028149,
+        "with_sidewalk_density_km_per_km2": 0.07715135249799647,
+        "pop_k": 18960.744,
+        "car_km_per_1k": 0.8900815732758167,
+        "foot_km_per_1k": 0.1959854117538848,
+        "foot_to_car_ratio": 0.22018814638818865,
+        "sidewalk_share_of_foot": 0.12920887904105338,
+        "roads_with_sidewalk_share": 0.012925600867972951
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.0683,
+          22.54554
+        ]
+      },
+      "properties": {
+        "rank": 3,
+        "city": "Shenzhen",
+        "country_code": "CN",
+        "lat": 22.54554,
+        "lon": 114.0683,
+        "population": 17494398,
+        "radius_m": 30000,
+        "car_len_m": 10287625.48,
+        "footway_len_m": 8128926.17,
+        "sidewalk_len_m": 2252774.96,
+        "with_sidewalk_len_m": 1448489.06,
+        "car_len_km": 10287.62548,
+        "footway_len_km": 8128.92617,
+        "sidewalk_len_km": 2252.7749599999997,
+        "with_sidewalk_len_km": 1448.48906,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 3.6385032173780725,
+        "foot_density_km_per_km2": 2.875019515521264,
+        "sidewalk_density_km_per_km2": 0.7967561567947706,
+        "with_sidewalk_density_km_per_km2": 0.51229820869674,
+        "pop_k": 17494.398,
+        "car_km_per_1k": 0.5880525571671572,
+        "foot_km_per_1k": 0.4646588107804566,
+        "foot_to_car_ratio": 0.7901654454473783,
+        "sidewalk_share_of_foot": 0.27713069511123384,
+        "roads_with_sidewalk_share": 0.14079916330702194
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.25,
+          23.11667
+        ]
+      },
+      "properties": {
+        "rank": 4,
+        "city": "Guangzhou",
+        "country_code": "CN",
+        "lat": 23.11667,
+        "lon": 113.25,
+        "population": 16096724,
+        "radius_m": 30000,
+        "car_len_m": 15542594.85,
+        "footway_len_m": 2137960.77,
+        "sidewalk_len_m": 551344.77,
+        "with_sidewalk_len_m": 250632.66,
+        "car_len_km": 15542.59485,
+        "footway_len_km": 2137.96077,
+        "sidewalk_len_km": 551.34477,
+        "with_sidewalk_len_km": 250.63266000000002,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 5.497068441893634,
+        "foot_density_km_per_km2": 0.7561489437378995,
+        "sidewalk_density_km_per_km2": 0.19499832331858696,
+        "with_sidewalk_density_km_per_km2": 0.0886431705317119,
+        "pop_k": 16096.724,
+        "car_km_per_1k": 0.9655750356407925,
+        "foot_km_per_1k": 0.13281962031528902,
+        "foot_to_car_ratio": 0.13755494437275384,
+        "sidewalk_share_of_foot": 0.25788348305380737,
+        "roads_with_sidewalk_share": 0.016125535177287337
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15.31357,
+          -4.32758
+        ]
+      },
+      "properties": {
+        "rank": 5,
+        "city": "Kinshasa",
+        "country_code": "CD",
+        "lat": -4.32758,
+        "lon": 15.31357,
+        "population": 16000000,
+        "radius_m": 30000,
+        "car_len_m": 12749027.51,
+        "footway_len_m": 424968.72,
+        "sidewalk_len_m": 17143.48,
+        "with_sidewalk_len_m": 29982.48,
+        "car_len_km": 12749.02751,
+        "footway_len_km": 424.96871999999996,
+        "sidewalk_len_km": 17.14348,
+        "with_sidewalk_len_km": 29.98248,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 4.50904610629124,
+        "foot_density_km_per_km2": 0.15030193877207912,
+        "sidewalk_density_km_per_km2": 0.006063265741771213,
+        "with_sidewalk_density_km_per_km2": 0.010604133107008645,
+        "pop_k": 16000.0,
+        "car_km_per_1k": 0.796814219375,
+        "foot_km_per_1k": 0.026560544999999998,
+        "foot_to_car_ratio": 0.03333342246431469,
+        "sidewalk_share_of_foot": 0.04034056906588325,
+        "roads_with_sidewalk_share": 0.0023517464352855568
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.94966,
+          41.01384
+        ]
+      },
+      "properties": {
+        "rank": 6,
+        "city": "Istanbul",
+        "country_code": "TR",
+        "lat": 41.01384,
+        "lon": 28.94966,
+        "population": 15701602,
+        "radius_m": 30000,
+        "car_len_m": 16931323.82,
+        "footway_len_m": 2008953.1,
+        "sidewalk_len_m": 266245.3,
+        "with_sidewalk_len_m": 419837.83,
+        "car_len_km": 16931.32382,
+        "footway_len_km": 2008.9531000000002,
+        "sidewalk_len_km": 266.2453,
+        "with_sidewalk_len_km": 419.83783,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 5.988230842316783,
+        "foot_density_km_per_km2": 0.7105218140106373,
+        "sidewalk_density_km_per_km2": 0.09416501237774356,
+        "with_sidewalk_density_km_per_km2": 0.14848725764772186,
+        "pop_k": 15701.602,
+        "car_km_per_1k": 1.0783182391198045,
+        "foot_km_per_1k": 0.12794574082313384,
+        "foot_to_car_ratio": 0.11865304339799698,
+        "sidewalk_share_of_foot": 0.13252937562355238,
+        "roads_with_sidewalk_share": 0.02479651529102938
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.39467,
+          6.45407
+        ]
+      },
+      "properties": {
+        "rank": 7,
+        "city": "Lagos",
+        "country_code": "NG",
+        "lat": 6.45407,
+        "lon": 3.39467,
+        "population": 15388000,
+        "radius_m": 30000,
+        "car_len_m": 13199952.54,
+        "footway_len_m": 102668.29,
+        "sidewalk_len_m": 5346.08,
+        "with_sidewalk_len_m": 8956.45,
+        "car_len_km": 13199.952539999998,
+        "footway_len_km": 102.66829,
+        "sidewalk_len_km": 5.34608,
+        "with_sidewalk_len_km": 8.95645,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 4.668528211820932,
+        "foot_density_km_per_km2": 0.03631147967176046,
+        "sidewalk_density_km_per_km2": 0.0018907890181438219,
+        "with_sidewalk_density_km_per_km2": 0.0031676962001231245,
+        "pop_k": 15388.0,
+        "car_km_per_1k": 0.8578081972965946,
+        "foot_km_per_1k": 0.006671971016376397,
+        "foot_to_car_ratio": 0.007777928722764939,
+        "sidewalk_share_of_foot": 0.05207138445570682,
+        "roads_with_sidewalk_share": 0.0006785213789867158
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.62965,
+          10.82302
+        ]
+      },
+      "properties": {
+        "rank": 8,
+        "city": "Ho Chi Minh City",
+        "country_code": "VN",
+        "lat": 10.82302,
+        "lon": 106.62965,
+        "population": 14002598,
+        "radius_m": 30000,
+        "car_len_m": 20463147.75,
+        "footway_len_m": 641123.87,
+        "sidewalk_len_m": 271549.01,
+        "with_sidewalk_len_m": 263004.64,
+        "car_len_km": 20463.14775,
+        "footway_len_km": 641.12387,
+        "sidewalk_len_km": 271.54901,
+        "with_sidewalk_len_km": 263.00464,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 7.2373580347384365,
+        "foot_density_km_per_km2": 0.22675118454379048,
+        "sidewalk_density_km_per_km2": 0.09604081607380116,
+        "with_sidewalk_density_km_per_km2": 0.09301886336023205,
+        "pop_k": 14002.598,
+        "car_km_per_1k": 1.4613822199280448,
+        "foot_km_per_1k": 0.045786065557263014,
+        "foot_to_car_ratio": 0.03133065732763426,
+        "sidewalk_share_of_foot": 0.4235515517461548,
+        "roads_with_sidewalk_share": 0.012852599375870704
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.06667,
+          30.66667
+        ]
+      },
+      "properties": {
+        "rank": 9,
+        "city": "Chengdu",
+        "country_code": "CN",
+        "lat": 30.66667,
+        "lon": 104.06667,
+        "population": 13568357,
+        "radius_m": 30000,
+        "car_len_m": 15128553.54,
+        "footway_len_m": 1128842.81,
+        "sidewalk_len_m": 112971.03,
+        "with_sidewalk_len_m": 16313.69,
+        "car_len_km": 15128.553539999999,
+        "footway_len_km": 1128.84281,
+        "sidewalk_len_km": 112.97103,
+        "with_sidewalk_len_km": 16.31369,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 5.350631283825315,
+        "foot_density_km_per_km2": 0.39924647374498945,
+        "sidewalk_density_km_per_km2": 0.03995532855707289,
+        "with_sidewalk_density_km_per_km2": 0.005769787563486272,
+        "pop_k": 13568.357,
+        "car_km_per_1k": 1.1149878750979207,
+        "foot_km_per_1k": 0.08319672087047829,
+        "foot_to_car_ratio": 0.07461670456566333,
+        "sidewalk_share_of_foot": 0.10007684772337788,
+        "roads_with_sidewalk_share": 0.0010783377245462689
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.35071,
+          31.558
+        ]
+      },
+      "properties": {
+        "rank": 10,
+        "city": "Lahore",
+        "country_code": "PK",
+        "lat": 31.558,
+        "lon": 74.35071,
+        "population": 13004135,
+        "radius_m": 30000,
+        "car_len_m": 17617229.66,
+        "footway_len_m": 172087.64,
+        "sidewalk_len_m": 6523.67,
+        "with_sidewalk_len_m": 6071.05,
+        "car_len_km": 17617.22966,
+        "footway_len_km": 172.08764000000002,
+        "sidewalk_len_km": 6.52367,
+        "with_sidewalk_len_km": 6.0710500000000005,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 6.2308204088314465,
+        "foot_density_km_per_km2": 0.060863552335596836,
+        "sidewalk_density_km_per_km2": 0.002307276283556233,
+        "with_sidewalk_density_km_per_km2": 0.002147194705017892,
+        "pop_k": 13004.135,
+        "car_km_per_1k": 1.3547406005858906,
+        "foot_km_per_1k": 0.013233301561387975,
+        "foot_to_car_ratio": 0.009768144215700712,
+        "sidewalk_share_of_foot": 0.03790899799660219,
+        "roads_with_sidewalk_share": 0.0003446086653331396
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.88261,
+          19.07283
+        ]
+      },
+      "properties": {
+        "rank": 11,
+        "city": "Mumbai",
+        "country_code": "IN",
+        "lat": 19.07283,
+        "lon": 72.88261,
+        "population": 12691836,
+        "radius_m": 30000,
+        "car_len_m": 8199527.72,
+        "footway_len_m": 553311.9,
+        "sidewalk_len_m": 50535.34,
+        "with_sidewalk_len_m": 61201.5,
+        "car_len_km": 8199.52772,
+        "footway_len_km": 553.3119,
+        "sidewalk_len_km": 50.53534,
+        "with_sidewalk_len_km": 61.2015,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 2.8999897059044852,
+        "foot_density_km_per_km2": 0.19569405323681888,
+        "sidewalk_density_km_per_km2": 0.017873220359621293,
+        "with_sidewalk_density_km_per_km2": 0.02164560277697474,
+        "pop_k": 12691.836,
+        "car_km_per_1k": 0.6460474055920673,
+        "foot_km_per_1k": 0.04359589109093437,
+        "foot_to_car_ratio": 0.06748094754901322,
+        "sidewalk_share_of_foot": 0.09133246546839133,
+        "roads_with_sidewalk_share": 0.007464027452546987
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -46.63611,
+          -23.5475
+        ]
+      },
+      "properties": {
+        "rank": 12,
+        "city": "S\u00e3o Paulo",
+        "country_code": "BR",
+        "lat": -23.5475,
+        "lon": -46.63611,
+        "population": 12400232,
+        "radius_m": 30000,
+        "car_len_m": 27872358.47,
+        "footway_len_m": 2588112.83,
+        "sidewalk_len_m": 1079304.25,
+        "with_sidewalk_len_m": 1748289.54,
+        "car_len_km": 27872.35847,
+        "footway_len_km": 2588.11283,
+        "sidewalk_len_km": 1079.30425,
+        "with_sidewalk_len_km": 1748.28954,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 9.857830280288349,
+        "foot_density_km_per_km2": 0.9153576670534538,
+        "sidewalk_density_km_per_km2": 0.38172579219464614,
+        "with_sidewalk_density_km_per_km2": 0.6183309383263464,
+        "pop_k": 12400.232,
+        "car_km_per_1k": 2.24772879007425,
+        "foot_km_per_1k": 0.2087148716249825,
+        "foot_to_car_ratio": 0.09285589638155942,
+        "sidewalk_share_of_foot": 0.41702364653089713,
+        "roads_with_sidewalk_share": 0.06272485128525257
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.12766,
+          19.42847
+        ]
+      },
+      "properties": {
+        "rank": 13,
+        "city": "Mexico City",
+        "country_code": "MX",
+        "lat": 19.42847,
+        "lon": -99.12766,
+        "population": 12294193,
+        "radius_m": 30000,
+        "car_len_m": 34474798.59,
+        "footway_len_m": 2808964.19,
+        "sidewalk_len_m": 358917.72,
+        "with_sidewalk_len_m": 1318294.87,
+        "car_len_km": 34474.798590000006,
+        "footway_len_km": 2808.96419,
+        "sidewalk_len_km": 358.91772,
+        "with_sidewalk_len_km": 1318.2948700000002,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 12.19296579488001,
+        "foot_density_km_per_km2": 0.9934678573480488,
+        "sidewalk_density_km_per_km2": 0.12694117622505072,
+        "with_sidewalk_density_km_per_km2": 0.46625143336263913,
+        "pop_k": 12294.193,
+        "car_km_per_1k": 2.8041530330620326,
+        "foot_km_per_1k": 0.22847894042333647,
+        "foot_to_car_ratio": 0.08147877014181563,
+        "sidewalk_share_of_foot": 0.12777582614892644,
+        "roads_with_sidewalk_share": 0.03823937844215263
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          67.0104,
+          24.8608
+        ]
+      },
+      "properties": {
+        "rank": 14,
+        "city": "Karachi",
+        "country_code": "PK",
+        "lat": 24.8608,
+        "lon": 67.0104,
+        "population": 11624219,
+        "radius_m": 30000,
+        "car_len_m": 16657298.23,
+        "footway_len_m": 145789.96,
+        "sidewalk_len_m": 4656.88,
+        "with_sidewalk_len_m": 83190.54,
+        "car_len_km": 16657.29823,
+        "footway_len_km": 145.78995999999998,
+        "sidewalk_len_km": 4.65688,
+        "with_sidewalk_len_km": 83.19054,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 5.891314115245287,
+        "foot_density_km_per_km2": 0.05156265063815488,
+        "sidewalk_density_km_per_km2": 0.0016470343808573013,
+        "with_sidewalk_density_km_per_km2": 0.029422634798853427,
+        "pop_k": 11624.219,
+        "car_km_per_1k": 1.4329821409937304,
+        "foot_km_per_1k": 0.012541914428831734,
+        "foot_to_car_ratio": 0.008752317331836592,
+        "sidewalk_share_of_foot": 0.031942391643430046,
+        "roads_with_sidewalk_share": 0.004994239693095775
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          117.17667,
+          39.14222
+        ]
+      },
+      "properties": {
+        "rank": 15,
+        "city": "Tianjin",
+        "country_code": "CN",
+        "lat": 39.14222,
+        "lon": 117.17667,
+        "population": 11090314,
+        "radius_m": 30000,
+        "car_len_m": 10203525.62,
+        "footway_len_m": 298283.47,
+        "sidewalk_len_m": 3974.74,
+        "with_sidewalk_len_m": 5499.46,
+        "car_len_km": 10203.525619999999,
+        "footway_len_km": 298.28346999999997,
+        "sidewalk_len_km": 3.9747399999999997,
+        "with_sidewalk_len_km": 5.49946,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 3.6087589764173242,
+        "foot_density_km_per_km2": 0.10549619709578459,
+        "sidewalk_density_km_per_km2": 0.0014057767077890668,
+        "with_sidewalk_density_km_per_km2": 0.0019450360963025662,
+        "pop_k": 11090.314,
+        "car_km_per_1k": 0.9200393803097007,
+        "foot_km_per_1k": 0.026895854346414352,
+        "foot_to_car_ratio": 0.029233372964275462,
+        "sidewalk_share_of_foot": 0.01332537803720736,
+        "roads_with_sidewalk_share": 0.0005389764484170522
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.23149,
+          28.65195
+        ]
+      },
+      "properties": {
+        "rank": 16,
+        "city": "Delhi",
+        "country_code": "IN",
+        "lat": 28.65195,
+        "lon": 77.23149,
+        "population": 11034555,
+        "radius_m": 30000,
+        "car_len_m": 31364165.8,
+        "footway_len_m": 1111392.13,
+        "sidewalk_len_m": 93500.04,
+        "with_sidewalk_len_m": 191123.8,
+        "car_len_km": 31364.165800000002,
+        "footway_len_km": 1111.39213,
+        "sidewalk_len_km": 93.50004,
+        "with_sidewalk_len_km": 191.1238,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 11.092804495608378,
+        "foot_density_km_per_km2": 0.3930745582287341,
+        "sidewalk_density_km_per_km2": 0.03306887454508875,
+        "with_sidewalk_density_km_per_km2": 0.06759621669445952,
+        "pop_k": 11034.555,
+        "car_km_per_1k": 2.842358917056465,
+        "foot_km_per_1k": 0.10071925238489454,
+        "foot_to_car_ratio": 0.03543509293653842,
+        "sidewalk_share_of_foot": 0.08412875840681003,
+        "roads_with_sidewalk_share": 0.006093699453661222
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.26667,
+          30.58333
+        ]
+      },
+      "properties": {
+        "rank": 17,
+        "city": "Wuhan",
+        "country_code": "CN",
+        "lat": 30.58333,
+        "lon": 114.26667,
+        "population": 10392693,
+        "radius_m": 30000,
+        "car_len_m": 10035552.22,
+        "footway_len_m": 752592.1,
+        "sidewalk_len_m": 85728.66,
+        "with_sidewalk_len_m": 2272.43,
+        "car_len_km": 10035.552220000001,
+        "footway_len_km": 752.5921,
+        "sidewalk_len_km": 85.72866,
+        "with_sidewalk_len_km": 2.27243,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 3.549350538821876,
+        "foot_density_km_per_km2": 0.2661750063264667,
+        "sidewalk_density_km_per_km2": 0.03032031111920988,
+        "with_sidewalk_density_km_per_km2": 0.0008037077051784794,
+        "pop_k": 10392.693,
+        "car_km_per_1k": 0.9656353959459788,
+        "foot_km_per_1k": 0.072415503854487,
+        "foot_to_car_ratio": 0.07499259467756522,
+        "sidewalk_share_of_foot": 0.11391118774698805,
+        "roads_with_sidewalk_share": 0.0002264379627731138
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          37.61556,
+          55.75222
+        ]
+      },
+      "properties": {
+        "rank": 18,
+        "city": "Moscow",
+        "country_code": "RU",
+        "lat": 55.75222,
+        "lon": 37.61556,
+        "population": 10381222,
+        "radius_m": 30000,
+        "car_len_m": 9712826.73,
+        "footway_len_m": 22551818.54,
+        "sidewalk_len_m": 4460664.37,
+        "with_sidewalk_len_m": 835289.86,
+        "car_len_km": 9712.82673,
+        "footway_len_km": 22551.81854,
+        "sidewalk_len_km": 4460.66437,
+        "with_sidewalk_len_km": 835.28986,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 3.435209745499089,
+        "foot_density_km_per_km2": 7.976074214116556,
+        "sidewalk_density_km_per_km2": 1.577637297687545,
+        "with_sidewalk_density_km_per_km2": 0.29542335585230495,
+        "pop_k": 10381.222,
+        "car_km_per_1k": 0.9356149719175644,
+        "foot_km_per_1k": 2.172366465142543,
+        "foot_to_car_ratio": 2.321859451105435,
+        "sidewalk_share_of_foot": 0.1977962159498646,
+        "roads_with_sidewalk_share": 0.08599863697970034
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          90.40744,
+          23.7104
+        ]
+      },
+      "properties": {
+        "rank": 19,
+        "city": "Dhaka",
+        "country_code": "BD",
+        "lat": 23.7104,
+        "lon": 90.40744,
+        "population": 10356500,
+        "radius_m": 30000,
+        "car_len_m": 11013865.6,
+        "footway_len_m": 330658.82,
+        "sidewalk_len_m": 15701.46,
+        "with_sidewalk_len_m": 369701.14,
+        "car_len_km": 11013.8656,
+        "footway_len_km": 330.65882,
+        "sidewalk_len_km": 15.701459999999999,
+        "with_sidewalk_len_km": 369.70114,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 3.8953581173106304,
+        "foot_density_km_per_km2": 0.11694663484429614,
+        "sidewalk_density_km_per_km2": 0.005553255495021491,
+        "with_sidewalk_density_km_per_km2": 0.13075503088379742,
+        "pop_k": 10356.5,
+        "car_km_per_1k": 1.0634737218172161,
+        "foot_km_per_1k": 0.03192766088929658,
+        "foot_to_car_ratio": 0.030022049660747632,
+        "sidewalk_share_of_foot": 0.04748538085268676,
+        "roads_with_sidewalk_share": 0.033566883184047575
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.9784,
+          37.566
+        ]
+      },
+      "properties": {
+        "rank": 20,
+        "city": "Seoul",
+        "country_code": "KR",
+        "lat": 37.566,
+        "lon": 126.9784,
+        "population": 10349312,
+        "radius_m": 30000,
+        "car_len_m": 17385871.04,
+        "footway_len_m": 8562554.55,
+        "sidewalk_len_m": 2667233.08,
+        "with_sidewalk_len_m": 578573.75,
+        "car_len_km": 17385.871039999998,
+        "footway_len_km": 8562.55455,
+        "sidewalk_len_km": 2667.23308,
+        "with_sidewalk_len_km": 578.57375,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 6.1489940354982915,
+        "foot_density_km_per_km2": 3.0283841825033324,
+        "sidewalk_density_km_per_km2": 0.943340731244935,
+        "with_sidewalk_density_km_per_km2": 0.20462860501269886,
+        "pop_k": 10349.312,
+        "car_km_per_1k": 1.6799059724936303,
+        "foot_km_per_1k": 0.8273549536432954,
+        "foot_to_car_ratio": 0.4925007513457319,
+        "sidewalk_share_of_foot": 0.31149968907351366,
+        "roads_with_sidewalk_share": 0.03327838729902371
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.69171,
+          35.6895
+        ]
+      },
+      "properties": {
+        "rank": 21,
+        "city": "Tokyo",
+        "country_code": "JP",
+        "lat": 35.6895,
+        "lon": 139.69171,
+        "population": 9733276,
+        "radius_m": 30000,
+        "car_len_m": 44199573.45,
+        "footway_len_m": 14278070.01,
+        "sidewalk_len_m": 7801313.06,
+        "with_sidewalk_len_m": 870276.26,
+        "car_len_km": 44199.57345,
+        "footway_len_km": 14278.07001,
+        "sidewalk_len_km": 7801.3130599999995,
+        "with_sidewalk_len_km": 870.27626,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 15.632401326935108,
+        "foot_density_km_per_km2": 5.04983426645255,
+        "sidewalk_density_km_per_km2": 2.7591500802363553,
+        "with_sidewalk_density_km_per_km2": 0.3077972636322834,
+        "pop_k": 9733.276,
+        "car_km_per_1k": 4.541078815601243,
+        "foot_km_per_1k": 1.4669336418693972,
+        "foot_to_car_ratio": 0.3230363755919911,
+        "sidewalk_share_of_foot": 0.546384284047925,
+        "roads_with_sidewalk_share": 0.01968969815929298
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.74866,
+          23.01797
+        ]
+      },
+      "properties": {
+        "rank": 22,
+        "city": "Dongguan",
+        "country_code": "CN",
+        "lat": 23.01797,
+        "lon": 113.74866,
+        "population": 9644871,
+        "radius_m": 30000,
+        "car_len_m": 11086444.21,
+        "footway_len_m": 455334.95,
+        "sidewalk_len_m": 51157.23,
+        "with_sidewalk_len_m": 12135.85,
+        "car_len_km": 11086.444210000001,
+        "footway_len_km": 455.33495,
+        "sidewalk_len_km": 51.157230000000006,
+        "with_sidewalk_len_km": 12.13585,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 3.921027549631162,
+        "foot_density_km_per_km2": 0.16104179567778001,
+        "sidewalk_density_km_per_km2": 0.018093168954197783,
+        "with_sidewalk_density_km_per_km2": 0.004292178924715062,
+        "pop_k": 9644.871,
+        "car_km_per_1k": 1.149465266046586,
+        "foot_km_per_1k": 0.04721006118174106,
+        "foot_to_car_ratio": 0.041071324707455496,
+        "sidewalk_share_of_foot": 0.11235076507964084,
+        "roads_with_sidewalk_share": 0.0010946566608844189
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          31.24967,
+          30.06263
+        ]
+      },
+      "properties": {
+        "rank": 23,
+        "city": "Cairo",
+        "country_code": "EG",
+        "lat": 30.06263,
+        "lon": 31.24967,
+        "population": 9606916,
+        "radius_m": 30000,
+        "car_len_m": 31735167.15,
+        "footway_len_m": 2998351.55,
+        "sidewalk_len_m": 24006.2,
+        "with_sidewalk_len_m": 37074.7,
+        "car_len_km": 31735.167149999997,
+        "footway_len_km": 2998.35155,
+        "sidewalk_len_km": 24.0062,
+        "with_sidewalk_len_km": 37.0747,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 11.22401938171119,
+        "foot_density_km_per_km2": 1.0604499340216582,
+        "sidewalk_density_km_per_km2": 0.008490456433005906,
+        "with_sidewalk_density_km_per_km2": 0.013112492819220205,
+        "pop_k": 9606.916,
+        "car_km_per_1k": 3.3033667776422737,
+        "foot_km_per_1k": 0.3121034419370379,
+        "foot_to_car_ratio": 0.09448040830627862,
+        "sidewalk_share_of_foot": 0.00800646608634001,
+        "roads_with_sidewalk_share": 0.0011682528667569978
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          108.92861,
+          34.25833
+        ]
+      },
+      "properties": {
+        "rank": 24,
+        "city": "Xi\u2019an",
+        "country_code": "CN",
+        "lat": 34.25833,
+        "lon": 108.92861,
+        "population": 9600000,
+        "radius_m": 30000,
+        "car_len_m": 11504673.65,
+        "footway_len_m": 731296.39,
+        "sidewalk_len_m": 47652.29,
+        "with_sidewalk_len_m": 60406.44,
+        "car_len_km": 11504.67365,
+        "footway_len_km": 731.29639,
+        "sidewalk_len_km": 47.65229,
+        "with_sidewalk_len_km": 60.40644,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 4.068945955681285,
+        "foot_density_km_per_km2": 0.2586431896305744,
+        "sidewalk_density_km_per_km2": 0.01685355000699665,
+        "with_sidewalk_density_km_per_km2": 0.02136440782351998,
+        "pop_k": 9600.0,
+        "car_km_per_1k": 1.1984035052083335,
+        "foot_km_per_1k": 0.07617670729166666,
+        "foot_to_car_ratio": 0.06356515727849438,
+        "sidewalk_share_of_foot": 0.06516139099223504,
+        "roads_with_sidewalk_share": 0.005250600046355944
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.04363,
+          -26.20227
+        ]
+      },
+      "properties": {
+        "rank": 25,
+        "city": "Johannesburg",
+        "country_code": "ZA",
+        "lat": -26.20227,
+        "lon": 28.04363,
+        "population": 9418183,
+        "radius_m": 30000,
+        "car_len_m": 21625709.55,
+        "footway_len_m": 1232201.06,
+        "sidewalk_len_m": 212675.76,
+        "with_sidewalk_len_m": 81697.75,
+        "car_len_km": 21625.70955,
+        "footway_len_km": 1232.20106,
+        "sidewalk_len_km": 212.67576,
+        "with_sidewalk_len_km": 81.69775,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 7.64853016167135,
+        "foot_density_km_per_km2": 0.4358019768490514,
+        "sidewalk_density_km_per_km2": 0.07521866328850131,
+        "with_sidewalk_density_km_per_km2": 0.02889466833774643,
+        "pop_k": 9418.183,
+        "car_km_per_1k": 2.2961657837822855,
+        "foot_km_per_1k": 0.13083214246314814,
+        "foot_to_car_ratio": 0.0569785262837769,
+        "sidewalk_share_of_foot": 0.1725982608714847,
+        "roads_with_sidewalk_share": 0.0037778066801049774
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          118.77778,
+          32.06167
+        ]
+      },
+      "properties": {
+        "rank": 26,
+        "city": "Nanjing",
+        "country_code": "CN",
+        "lat": 32.06167,
+        "lon": 118.77778,
+        "population": 9314685,
+        "radius_m": 30000,
+        "car_len_m": 8373156.2,
+        "footway_len_m": 1003167.99,
+        "sidewalk_len_m": 94619.96,
+        "with_sidewalk_len_m": 16273.69,
+        "car_len_km": 8373.1562,
+        "footway_len_km": 1003.16799,
+        "sidewalk_len_km": 94.61996,
+        "with_sidewalk_len_km": 16.273690000000002,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 2.9613982189123345,
+        "foot_density_km_per_km2": 0.35479809857791345,
+        "sidewalk_density_km_per_km2": 0.03346496522034981,
+        "with_sidewalk_density_km_per_km2": 0.005755640457433659,
+        "pop_k": 9314.685,
+        "car_km_per_1k": 0.8989199527412897,
+        "foot_km_per_1k": 0.10769746803031988,
+        "foot_to_car_ratio": 0.1198076288126573,
+        "sidewalk_share_of_foot": 0.09432115153514817,
+        "roads_with_sidewalk_share": 0.0019435550479758163
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.16142,
+          30.29365
+        ]
+      },
+      "properties": {
+        "rank": 27,
+        "city": "Hangzhou",
+        "country_code": "CN",
+        "lat": 30.29365,
+        "lon": 120.16142,
+        "population": 9236032,
+        "radius_m": 30000,
+        "car_len_m": 13800396.33,
+        "footway_len_m": 1429051.38,
+        "sidewalk_len_m": 124197.05,
+        "with_sidewalk_len_m": 9662.3,
+        "car_len_km": 13800.39633,
+        "footway_len_km": 1429.0513799999999,
+        "sidewalk_len_km": 124.19705,
+        "with_sidewalk_len_km": 9.6623,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 4.880891761215003,
+        "foot_density_km_per_km2": 0.5054235356873211,
+        "sidewalk_density_km_per_km2": 0.043925720944291737,
+        "with_sidewalk_density_km_per_km2": 0.0034173395703040454,
+        "pop_k": 9236.032,
+        "car_km_per_1k": 1.4941910476273794,
+        "foot_km_per_1k": 0.15472568522932792,
+        "foot_to_car_ratio": 0.1035514738727797,
+        "sidewalk_share_of_foot": 0.08690873661939294,
+        "roads_with_sidewalk_share": 0.0007001465587619106
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          113.13148,
+          23.02677
+        ]
+      },
+      "properties": {
+        "rank": 28,
+        "city": "Foshan",
+        "country_code": "CN",
+        "lat": 23.02677,
+        "lon": 113.13148,
+        "population": 9042509,
+        "radius_m": 30000,
+        "car_len_m": 15387758.65,
+        "footway_len_m": 1894093.31,
+        "sidewalk_len_m": 627645.36,
+        "with_sidewalk_len_m": 243850.54,
+        "car_len_km": 15387.75865,
+        "footway_len_km": 1894.09331,
+        "sidewalk_len_km": 627.64536,
+        "with_sidewalk_len_km": 243.85054,
+        "aoi_area_km2": 2827.4333882308138,
+        "car_density_km_per_km2": 5.442306338339045,
+        "foot_density_km_per_km2": 0.669898473252866,
+        "sidewalk_density_km_per_km2": 0.22198413678376036,
+        "with_sidewalk_density_km_per_km2": 0.08624448625917322,
+        "pop_k": 9042.509,
+        "car_km_per_1k": 1.7017133906087347,
+        "foot_km_per_1k": 0.20946546030532012,
+        "foot_to_car_ratio": 0.12309091616796317,
+        "sidewalk_share_of_foot": 0.3313698204234722,
+        "roads_with_sidewalk_share": 0.01584704735409923
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -0.12574,
+          51.50853
+        ]
+      },
+      "properties": {
+        "rank": 29,
+        "city": "London",
+        "country_code": "GB",
+        "lat": 51.50853,
+        "lon": -0.12574,
+        "population": 8961989,
+        "radius_m": 29937,
+        "car_len_m": 20673067.12,
+        "footway_len_m": 14782375.58,
+        "sidewalk_len_m": 3327824.43,
+        "with_sidewalk_len_m": 6022749.6,
+        "car_len_km": 20673.06712,
+        "footway_len_km": 14782.37558,
+        "sidewalk_len_km": 3327.82443,
+        "with_sidewalk_len_km": 6022.749599999999,
+        "aoi_area_km2": 2815.570636981487,
+        "car_density_km_per_km2": 7.342407556204362,
+        "foot_density_km_per_km2": 5.250223661888969,
+        "sidewalk_density_km_per_km2": 1.1819360474534886,
+        "with_sidewalk_density_km_per_km2": 2.1390866636032473,
+        "pop_k": 8961.989,
+        "car_km_per_1k": 2.306749887776028,
+        "foot_km_per_1k": 1.6494525467505037,
+        "foot_to_car_ratio": 0.7150547857361187,
+        "sidewalk_share_of_foot": 0.22512108503740236,
+        "roads_with_sidewalk_share": 0.29133314205579763
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.00597,
+          40.71427
+        ]
+      },
+      "properties": {
+        "rank": 30,
+        "city": "New York City",
+        "country_code": "US",
+        "lat": 40.71427,
+        "lon": -74.00597,
+        "population": 8804190,
+        "radius_m": 29672,
+        "car_len_m": 22257151.91,
+        "footway_len_m": 21099708.88,
+        "sidewalk_len_m": 17125928.62,
+        "with_sidewalk_len_m": 1589738.26,
+        "car_len_km": 22257.15191,
+        "footway_len_km": 21099.70888,
+        "sidewalk_len_km": 17125.928620000002,
+        "with_sidewalk_len_km": 1589.73826,
+        "aoi_area_km2": 2765.9448299122105,
+        "car_density_km_per_km2": 8.046853165435852,
+        "foot_density_km_per_km2": 7.628391084239266,
+        "sidewalk_density_km_per_km2": 6.191710129136441,
+        "with_sidewalk_density_km_per_km2": 0.5747541465064064,
+        "pop_k": 8804.19,
+        "car_km_per_1k": 2.5280181265965407,
+        "foot_km_per_1k": 2.396553104828496,
+        "foot_to_car_ratio": 0.9479968041427632,
+        "sidewalk_share_of_foot": 0.8116665835249194,
+        "roads_with_sidewalk_share": 0.07142595182116453
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.84513,
+          -6.21462
+        ]
+      },
+      "properties": {
+        "rank": 31,
+        "city": "Jakarta",
+        "country_code": "ID",
+        "lat": -6.21462,
+        "lon": 106.84513,
+        "population": 8540121,
+        "radius_m": 29223,
+        "car_len_m": 26345526.42,
+        "footway_len_m": 858809.06,
+        "sidewalk_len_m": 93104.06,
+        "with_sidewalk_len_m": 828331.47,
+        "car_len_km": 26345.526420000002,
+        "footway_len_km": 858.80906,
+        "sidewalk_len_km": 93.10406,
+        "with_sidewalk_len_km": 828.33147,
+        "aoi_area_km2": 2682.8690093116165,
+        "car_density_km_per_km2": 9.819907840658932,
+        "foot_density_km_per_km2": 0.32010845740857,
+        "sidewalk_density_km_per_km2": 0.034703170254252964,
+        "with_sidewalk_density_km_per_km2": 0.30874838358676976,
+        "pop_k": 8540.121,
+        "car_km_per_1k": 3.0849125463210654,
+        "foot_km_per_1k": 0.100561696959563,
+        "foot_to_car_ratio": 0.03259790851429113,
+        "sidewalk_share_of_foot": 0.10841066348321943,
+        "roads_with_sidewalk_share": 0.03144106732941113
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.59369,
+          12.97194
+        ]
+      },
+      "properties": {
+        "rank": 32,
+        "city": "Bengaluru",
+        "country_code": "IN",
+        "lat": 12.97194,
+        "lon": 77.59369,
+        "population": 8495492,
+        "radius_m": 29147,
+        "car_len_m": 25681006.19,
+        "footway_len_m": 1311698.37,
+        "sidewalk_len_m": 530938.95,
+        "with_sidewalk_len_m": 1252756.32,
+        "car_len_km": 25681.00619,
+        "footway_len_km": 1311.69837,
+        "sidewalk_len_km": 530.93895,
+        "with_sidewalk_len_km": 1252.75632,
+        "aoi_area_km2": 2668.932527309174,
+        "car_density_km_per_km2": 9.622201358492816,
+        "foot_density_km_per_km2": 0.49146928840590004,
+        "sidewalk_density_km_per_km2": 0.19893307326704668,
+        "with_sidewalk_density_km_per_km2": 0.4693847848087163,
+        "pop_k": 8495.492,
+        "car_km_per_1k": 3.022898048753386,
+        "foot_km_per_1k": 0.15439934143896553,
+        "foot_to_car_ratio": 0.051076595686923125,
+        "sidewalk_share_of_foot": 0.40477213522800976,
+        "roads_with_sidewalk_share": 0.04878143444737046
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          105.84117,
+          21.0245
+        ]
+      },
+      "properties": {
+        "rank": 33,
+        "city": "Hanoi",
+        "country_code": "VN",
+        "lat": 21.0245,
+        "lon": 105.84117,
+        "population": 8053663,
+        "radius_m": 28379,
+        "car_len_m": 19731179.34,
+        "footway_len_m": 2050033.41,
+        "sidewalk_len_m": 1472192.93,
+        "with_sidewalk_len_m": 495376.99,
+        "car_len_km": 19731.17934,
+        "footway_len_km": 2050.03341,
+        "sidewalk_len_km": 1472.19293,
+        "with_sidewalk_len_km": 495.37699,
+        "aoi_area_km2": 2530.137064404542,
+        "car_density_km_per_km2": 7.7984626278116895,
+        "foot_density_km_per_km2": 0.8102459897691224,
+        "sidewalk_density_km_per_km2": 0.5818629159311869,
+        "with_sidewalk_density_km_per_km2": 0.1957905747357545,
+        "pop_k": 8053.663,
+        "car_km_per_1k": 2.449963369463063,
+        "foot_km_per_1k": 0.25454670874607,
+        "foot_to_car_ratio": 0.10389816922114095,
+        "sidewalk_share_of_foot": 0.7181311888960873,
+        "roads_with_sidewalk_share": 0.02510630416275969
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.52639,
+          25.05306
+        ]
+      },
+      "properties": {
+        "rank": 34,
+        "city": "Taipei",
+        "country_code": "TW",
+        "lat": 25.05306,
+        "lon": 121.52639,
+        "population": 7871900,
+        "radius_m": 28057,
+        "car_len_m": 8271739.24,
+        "footway_len_m": 5277713.96,
+        "sidewalk_len_m": 1158779.62,
+        "with_sidewalk_len_m": 381283.04,
+        "car_len_km": 8271.73924,
+        "footway_len_km": 5277.71396,
+        "sidewalk_len_km": 1158.77962,
+        "with_sidewalk_len_km": 381.28303999999997,
+        "aoi_area_km2": 2473.0468111991877,
+        "car_density_km_per_km2": 3.344756436692361,
+        "foot_density_km_per_km2": 2.1340938376499317,
+        "sidewalk_density_km_per_km2": 0.46856356084829,
+        "with_sidewalk_density_km_per_km2": 0.15417542372160545,
+        "pop_k": 7871.9,
+        "car_km_per_1k": 1.0507932316213369,
+        "foot_km_per_1k": 0.670449822787383,
+        "foot_to_car_ratio": 0.6380416266603685,
+        "sidewalk_share_of_foot": 0.2195608986736371,
+        "roads_with_sidewalk_share": 0.04609466388352928
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.02824,
+          -12.04318
+        ]
+      },
+      "properties": {
+        "rank": 35,
+        "city": "Lima",
+        "country_code": "PE",
+        "lat": -12.04318,
+        "lon": -77.02824,
+        "population": 7737002,
+        "radius_m": 27815,
+        "car_len_m": 15676011.86,
+        "footway_len_m": 3745447.4,
+        "sidewalk_len_m": 1600493.46,
+        "with_sidewalk_len_m": 260163.73,
+        "car_len_km": 15676.011859999999,
+        "footway_len_km": 3745.4474,
+        "sidewalk_len_km": 1600.49346,
+        "with_sidewalk_len_km": 260.16373,
+        "aoi_area_km2": 2430.569261531777,
+        "car_density_km_per_km2": 6.44952279620321,
+        "foot_density_km_per_km2": 1.540975383536106,
+        "sidewalk_density_km_per_km2": 0.6584850246116203,
+        "with_sidewalk_density_km_per_km2": 0.10703818817985106,
+        "pop_k": 7737.002,
+        "car_km_per_1k": 2.0261093198631714,
+        "foot_km_per_1k": 0.48409544161937657,
+        "foot_to_car_ratio": 0.23892858932807673,
+        "sidewalk_share_of_foot": 0.4273170302698684,
+        "roads_with_sidewalk_share": 0.0165962958132133
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.08175,
+          4.60971
+        ]
+      },
+      "properties": {
+        "rank": 36,
+        "city": "Bogot\u00e1",
+        "country_code": "CO",
+        "lat": 4.60971,
+        "lon": -74.08175,
+        "population": 7674366,
+        "radius_m": 27703,
+        "car_len_m": 10152527.01,
+        "footway_len_m": 3940812.3,
+        "sidewalk_len_m": 1510372.12,
+        "with_sidewalk_len_m": 556035.38,
+        "car_len_km": 10152.52701,
+        "footway_len_km": 3940.8122999999996,
+        "sidewalk_len_km": 1510.3721200000002,
+        "with_sidewalk_len_km": 556.03538,
+        "aoi_area_km2": 2411.0347881462726,
+        "car_density_km_per_km2": 4.210858781430435,
+        "foot_density_km_per_km2": 1.634490020374156,
+        "sidewalk_density_km_per_km2": 0.6264414463970683,
+        "with_sidewalk_density_km_per_km2": 0.23062105231070043,
+        "pop_k": 7674.366,
+        "car_km_per_1k": 1.3229141026112123,
+        "foot_km_per_1k": 0.5135033043771954,
+        "foot_to_car_ratio": 0.3881607304386772,
+        "sidewalk_share_of_foot": 0.3832641610461885,
+        "roads_with_sidewalk_share": 0.054768175396363715
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.55771,
+          29.56026
+        ]
+      },
+      "properties": {
+        "rank": 37,
+        "city": "Chongqing",
+        "country_code": "CN",
+        "lat": 29.56026,
+        "lon": 106.55771,
+        "population": 7457599,
+        "radius_m": 27309,
+        "car_len_m": 8827306.87,
+        "footway_len_m": 658816.13,
+        "sidewalk_len_m": 115378.25,
+        "with_sidewalk_len_m": 7129.82,
+        "car_len_km": 8827.306869999999,
+        "footway_len_km": 658.81613,
+        "sidewalk_len_km": 115.37825,
+        "with_sidewalk_len_km": 7.12982,
+        "aoi_area_km2": 2342.9416218929164,
+        "car_density_km_per_km2": 3.7676170791093866,
+        "foot_density_km_per_km2": 0.28119186745580427,
+        "sidewalk_density_km_per_km2": 0.04924503834064088,
+        "with_sidewalk_density_km_per_km2": 0.0030431061249574175,
+        "pop_k": 7457.599,
+        "car_km_per_1k": 1.1836660659818259,
+        "foot_km_per_1k": 0.08834158688339237,
+        "foot_to_car_ratio": 0.07463387641354312,
+        "sidewalk_share_of_foot": 0.1751296678179388,
+        "roads_with_sidewalk_share": 0.000807700480452426
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.17469,
+          22.27832
+        ]
+      },
+      "properties": {
+        "rank": 38,
+        "city": "Hong Kong",
+        "country_code": "HK",
+        "lat": 22.27832,
+        "lon": 114.17469,
+        "population": 7396076,
+        "radius_m": 27196,
+        "car_len_m": 2713735.27,
+        "footway_len_m": 7381395.87,
+        "sidewalk_len_m": 1703980.92,
+        "with_sidewalk_len_m": 1401114.42,
+        "car_len_km": 2713.73527,
+        "footway_len_km": 7381.39587,
+        "sidewalk_len_km": 1703.98092,
+        "with_sidewalk_len_km": 1401.1144199999999,
+        "aoi_area_km2": 2323.592348535934,
+        "car_density_km_per_km2": 1.1679050637732948,
+        "foot_density_km_per_km2": 3.176717238998882,
+        "sidewalk_density_km_per_km2": 0.7333390132196195,
+        "with_sidewalk_density_km_per_km2": 0.6029949362171141,
+        "pop_k": 7396.076,
+        "car_km_per_1k": 0.36691554683862093,
+        "foot_km_per_1k": 0.9980151461396557,
+        "foot_to_car_ratio": 2.7200132421170173,
+        "sidewalk_share_of_foot": 0.23084806044957454,
+        "roads_with_sidewalk_share": 0.5163047536320666
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          44.40088,
+          33.34058
+        ]
+      },
+      "properties": {
+        "rank": 39,
+        "city": "Baghdad",
+        "country_code": "IQ",
+        "lat": 33.34058,
+        "lon": 44.40088,
+        "population": 7216000,
+        "radius_m": 26863,
+        "car_len_m": 15292646.97,
+        "footway_len_m": 211522.87,
+        "sidewalk_len_m": 37393.18,
+        "with_sidewalk_len_m": 6707.64,
+        "car_len_km": 15292.64697,
+        "footway_len_km": 211.52286999999998,
+        "sidewalk_len_km": 37.39318,
+        "with_sidewalk_len_km": 6.7076400000000005,
+        "aoi_area_km2": 2267.038506568217,
+        "car_density_km_per_km2": 6.74564941252348,
+        "foot_density_km_per_km2": 0.0933036070570313,
+        "sidewalk_density_km_per_km2": 0.01649428533818987,
+        "with_sidewalk_density_km_per_km2": 0.0029587675641883334,
+        "pop_k": 7216.0,
+        "car_km_per_1k": 2.1192692585920176,
+        "foot_km_per_1k": 0.029313036308203987,
+        "foot_to_car_ratio": 0.01383167154874824,
+        "sidewalk_share_of_foot": 0.1767807897084604,
+        "roads_with_sidewalk_share": 0.00043861863895495394
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.38042,
+          36.06488
+        ]
+      },
+      "properties": {
+        "rank": 40,
+        "city": "Qingdao",
+        "country_code": "CN",
+        "lat": 36.06488,
+        "lon": 120.38042,
+        "population": 7172451,
+        "radius_m": 26781,
+        "car_len_m": 4241371.56,
+        "footway_len_m": 280738.96,
+        "sidewalk_len_m": 37098.7,
+        "with_sidewalk_len_m": 49966.82,
+        "car_len_km": 4241.37156,
+        "footway_len_km": 280.73896,
+        "sidewalk_len_km": 37.098699999999994,
+        "with_sidewalk_len_km": 49.96682,
+        "aoi_area_km2": 2253.219243670865,
+        "car_density_km_per_km2": 1.8823607919707392,
+        "foot_density_km_per_km2": 0.12459460427056802,
+        "sidewalk_density_km_per_km2": 0.01646475375363833,
+        "with_sidewalk_density_km_per_km2": 0.022175747051847394,
+        "pop_k": 7172.451,
+        "car_km_per_1k": 0.5913420056825762,
+        "foot_km_per_1k": 0.039141286569960534,
+        "foot_to_car_ratio": 0.06619060745529214,
+        "sidewalk_share_of_foot": 0.13214660337845516,
+        "roads_with_sidewalk_share": 0.011780816486636696
+      }
+    }
+  ]
+};
+
+    const map = new maplibregl.Map({
+        container: 'map',
+        style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+        center: [0, 20],
+        zoom: 1
+    });
+
+    map.on('load', function () {
+        map.addSource('cities', {
+            'type': 'geojson',
+            'data': citiesData
+        });
+
+        map.addLayer({
+            'id': 'cities-layer',
+            'type': 'circle',
+            'source': 'cities',
+            'paint': {
+                'circle-radius': 5,
+                'circle-color': '#B42222'
+            }
+        });
+
+        const popup = new maplibregl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        });
+
+        map.on('mouseenter', 'cities-layer', function (e) {
+            map.getCanvas().style.cursor = 'pointer';
+
+            const coordinates = e.features[0].geometry.coordinates.slice();
+            const properties = e.features[0].properties;
+
+            let popupContent = `<h3>${properties.city}</h3>`;
+            for (const prop in properties) {
+                if (Object.prototype.hasOwnProperty.call(properties, prop)) {
+                    popupContent += `<strong>${prop}:</strong> ${properties[prop]}<br>`;
+                }
+            }
+
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+
+            popup.setLngLat(coordinates)
+                .setHTML(popupContent)
+                .addTo(map);
+        });
+
+        map.on('mouseleave', 'cities-layer', function () {
+            map.getCanvas().style.cursor = '';
+            popup.remove();
+        });
+    });
+</script>
+
+</body>
+</html>
