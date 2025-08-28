@@ -12,11 +12,45 @@
             max-width: 400px;
             font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
         }
+        .legend {
+            position: absolute;
+            bottom: 30px;
+            right: 10px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        }
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .legend-scale {
+            width: 150px;
+            height: 10px;
+            background: linear-gradient(to right, #FF0000, #FFFF00, #00FF00);
+            margin-bottom: 5px;
+        }
+        .legend-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+        }
     </style>
 </head>
 <body>
 
 <div id="map"></div>
+<div id="legend" class="legend">
+    <div class="legend-title">Foot-to-Car Ratio</div>
+    <div class="legend-scale"></div>
+    <div class="legend-labels">
+        <span>0</span>
+        <span>1</span>
+        <span>&ge;2.8</span>
+    </div>
+</div>
 
 <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
 <script>
@@ -1564,8 +1598,21 @@
             'type': 'circle',
             'source': 'cities',
             'paint': {
-                'circle-radius': 5,
-                'circle-color': '#B42222'
+                'circle-radius': [
+                    'interpolate',
+                    ['linear'],
+                    ['get', 'car_len_km'],
+                    1000, 5,
+                    45000, 20
+                ],
+                'circle-color': [
+                    'interpolate',
+                    ['linear'],
+                    ['get', 'foot_to_car_ratio'],
+                    0, '#FF0000', // Red
+                    1, '#FFFF00', // Yellow
+                    2.8, '#00FF00'  // Green
+                ]
             }
         });
 
