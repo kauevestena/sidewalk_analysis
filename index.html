@@ -29,7 +29,7 @@
         .legend-scale {
             width: 150px;
             height: 10px;
-            background: linear-gradient(to right, #FF0000, #FFFF00, #00FF00);
+            background: linear-gradient(to right, #440154, #21918c, #fde725);
             margin-bottom: 5px;
         }
         .legend-labels {
@@ -47,7 +47,7 @@
     <div class="legend-scale"></div>
     <div class="legend-labels">
         <span>0</span>
-        <span>1</span>
+        <span>1.4</span>
         <span>&ge;2.8</span>
     </div>
 </div>
@@ -55,8 +55,8 @@
 <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
 <script>
     const citiesData = {
-      "type": "FeatureCollection",
-      "features": [
+  "type": "FeatureCollection",
+  "features": [
     {
       "type": "Feature",
       "geometry": {
@@ -67,7 +67,7 @@
         ]
       },
       "properties": {
-        "rank": 1,
+        "idx": 1,
         "city": "Shanghai",
         "country_code": "CN",
         "lat": 31.22222,
@@ -105,7 +105,7 @@
         ]
       },
       "properties": {
-        "rank": 2,
+        "idx": 2,
         "city": "Beijing",
         "country_code": "CN",
         "lat": 39.9075,
@@ -143,7 +143,7 @@
         ]
       },
       "properties": {
-        "rank": 3,
+        "idx": 3,
         "city": "Shenzhen",
         "country_code": "CN",
         "lat": 22.54554,
@@ -181,7 +181,7 @@
         ]
       },
       "properties": {
-        "rank": 4,
+        "idx": 4,
         "city": "Guangzhou",
         "country_code": "CN",
         "lat": 23.11667,
@@ -219,7 +219,7 @@
         ]
       },
       "properties": {
-        "rank": 5,
+        "idx": 5,
         "city": "Kinshasa",
         "country_code": "CD",
         "lat": -4.32758,
@@ -257,7 +257,7 @@
         ]
       },
       "properties": {
-        "rank": 6,
+        "idx": 6,
         "city": "Istanbul",
         "country_code": "TR",
         "lat": 41.01384,
@@ -295,7 +295,7 @@
         ]
       },
       "properties": {
-        "rank": 7,
+        "idx": 7,
         "city": "Lagos",
         "country_code": "NG",
         "lat": 6.45407,
@@ -333,7 +333,7 @@
         ]
       },
       "properties": {
-        "rank": 8,
+        "idx": 8,
         "city": "Ho Chi Minh City",
         "country_code": "VN",
         "lat": 10.82302,
@@ -371,7 +371,7 @@
         ]
       },
       "properties": {
-        "rank": 9,
+        "idx": 9,
         "city": "Chengdu",
         "country_code": "CN",
         "lat": 30.66667,
@@ -409,7 +409,7 @@
         ]
       },
       "properties": {
-        "rank": 10,
+        "idx": 10,
         "city": "Lahore",
         "country_code": "PK",
         "lat": 31.558,
@@ -447,7 +447,7 @@
         ]
       },
       "properties": {
-        "rank": 11,
+        "idx": 11,
         "city": "Mumbai",
         "country_code": "IN",
         "lat": 19.07283,
@@ -485,7 +485,7 @@
         ]
       },
       "properties": {
-        "rank": 12,
+        "idx": 12,
         "city": "S\u00e3o Paulo",
         "country_code": "BR",
         "lat": -23.5475,
@@ -523,7 +523,7 @@
         ]
       },
       "properties": {
-        "rank": 13,
+        "idx": 13,
         "city": "Mexico City",
         "country_code": "MX",
         "lat": 19.42847,
@@ -561,7 +561,7 @@
         ]
       },
       "properties": {
-        "rank": 14,
+        "idx": 14,
         "city": "Karachi",
         "country_code": "PK",
         "lat": 24.8608,
@@ -599,7 +599,7 @@
         ]
       },
       "properties": {
-        "rank": 15,
+        "idx": 15,
         "city": "Tianjin",
         "country_code": "CN",
         "lat": 39.14222,
@@ -637,7 +637,7 @@
         ]
       },
       "properties": {
-        "rank": 16,
+        "idx": 16,
         "city": "Delhi",
         "country_code": "IN",
         "lat": 28.65195,
@@ -675,7 +675,7 @@
         ]
       },
       "properties": {
-        "rank": 17,
+        "idx": 17,
         "city": "Wuhan",
         "country_code": "CN",
         "lat": 30.58333,
@@ -713,7 +713,7 @@
         ]
       },
       "properties": {
-        "rank": 18,
+        "idx": 18,
         "city": "Moscow",
         "country_code": "RU",
         "lat": 55.75222,
@@ -751,7 +751,7 @@
         ]
       },
       "properties": {
-        "rank": 19,
+        "idx": 19,
         "city": "Dhaka",
         "country_code": "BD",
         "lat": 23.7104,
@@ -789,7 +789,7 @@
         ]
       },
       "properties": {
-        "rank": 20,
+        "idx": 20,
         "city": "Seoul",
         "country_code": "KR",
         "lat": 37.566,
@@ -827,7 +827,7 @@
         ]
       },
       "properties": {
-        "rank": 21,
+        "idx": 21,
         "city": "Tokyo",
         "country_code": "JP",
         "lat": 35.6895,
@@ -865,7 +865,7 @@
         ]
       },
       "properties": {
-        "rank": 22,
+        "idx": 22,
         "city": "Dongguan",
         "country_code": "CN",
         "lat": 23.01797,
@@ -903,7 +903,7 @@
         ]
       },
       "properties": {
-        "rank": 23,
+        "idx": 23,
         "city": "Cairo",
         "country_code": "EG",
         "lat": 30.06263,
@@ -941,7 +941,7 @@
         ]
       },
       "properties": {
-        "rank": 24,
+        "idx": 24,
         "city": "Xi\u2019an",
         "country_code": "CN",
         "lat": 34.25833,
@@ -979,7 +979,7 @@
         ]
       },
       "properties": {
-        "rank": 25,
+        "idx": 25,
         "city": "Johannesburg",
         "country_code": "ZA",
         "lat": -26.20227,
@@ -1017,7 +1017,7 @@
         ]
       },
       "properties": {
-        "rank": 26,
+        "idx": 26,
         "city": "Nanjing",
         "country_code": "CN",
         "lat": 32.06167,
@@ -1055,7 +1055,7 @@
         ]
       },
       "properties": {
-        "rank": 27,
+        "idx": 27,
         "city": "Hangzhou",
         "country_code": "CN",
         "lat": 30.29365,
@@ -1093,7 +1093,7 @@
         ]
       },
       "properties": {
-        "rank": 28,
+        "idx": 28,
         "city": "Foshan",
         "country_code": "CN",
         "lat": 23.02677,
@@ -1131,7 +1131,7 @@
         ]
       },
       "properties": {
-        "rank": 29,
+        "idx": 29,
         "city": "London",
         "country_code": "GB",
         "lat": 51.50853,
@@ -1169,7 +1169,7 @@
         ]
       },
       "properties": {
-        "rank": 30,
+        "idx": 30,
         "city": "New York City",
         "country_code": "US",
         "lat": 40.71427,
@@ -1207,7 +1207,7 @@
         ]
       },
       "properties": {
-        "rank": 31,
+        "idx": 31,
         "city": "Jakarta",
         "country_code": "ID",
         "lat": -6.21462,
@@ -1245,7 +1245,7 @@
         ]
       },
       "properties": {
-        "rank": 32,
+        "idx": 32,
         "city": "Bengaluru",
         "country_code": "IN",
         "lat": 12.97194,
@@ -1283,7 +1283,7 @@
         ]
       },
       "properties": {
-        "rank": 33,
+        "idx": 33,
         "city": "Hanoi",
         "country_code": "VN",
         "lat": 21.0245,
@@ -1321,7 +1321,7 @@
         ]
       },
       "properties": {
-        "rank": 34,
+        "idx": 34,
         "city": "Taipei",
         "country_code": "TW",
         "lat": 25.05306,
@@ -1359,7 +1359,7 @@
         ]
       },
       "properties": {
-        "rank": 35,
+        "idx": 35,
         "city": "Lima",
         "country_code": "PE",
         "lat": -12.04318,
@@ -1397,7 +1397,7 @@
         ]
       },
       "properties": {
-        "rank": 36,
+        "idx": 36,
         "city": "Bogot\u00e1",
         "country_code": "CO",
         "lat": 4.60971,
@@ -1435,7 +1435,7 @@
         ]
       },
       "properties": {
-        "rank": 37,
+        "idx": 37,
         "city": "Chongqing",
         "country_code": "CN",
         "lat": 29.56026,
@@ -1473,7 +1473,7 @@
         ]
       },
       "properties": {
-        "rank": 38,
+        "idx": 38,
         "city": "Hong Kong",
         "country_code": "HK",
         "lat": 22.27832,
@@ -1511,7 +1511,7 @@
         ]
       },
       "properties": {
-        "rank": 39,
+        "idx": 39,
         "city": "Baghdad",
         "country_code": "IQ",
         "lat": 33.34058,
@@ -1549,7 +1549,7 @@
         ]
       },
       "properties": {
-        "rank": 40,
+        "idx": 40,
         "city": "Qingdao",
         "country_code": "CN",
         "lat": 36.06488,
@@ -1609,10 +1609,13 @@
                     'interpolate',
                     ['linear'],
                     ['get', 'foot_to_car_ratio'],
-                    0, '#FF0000', // Red
-                    1, '#FFFF00', // Yellow
-                    2.8, '#00FF00'  // Green
-                ]
+                    0, '#440154',
+                    1.4, '#21918c',
+                    2.8, '#fde725'
+                ],
+                'circle-stroke-color': 'black',
+                'circle-stroke-width': 1,
+                'circle-opacity': 0.8
             }
         });
 
