@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedestrian Mapping Coverage by Country</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 1600px;
+            width: 100%;
+            display: flex;
+            height: 800px;
+        }
+        
+        .left-panel {
+            width: 40%;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .right-panel {
+            width: 60%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            background: #fafbfc;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        
+        .countries-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            flex: 1;
+        }
+        
+        .country-item {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            height: fit-content;
+        }
+        
+        .country-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .country-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .flag {
+            width: 40px;
+            height: 30px;
+            margin-right: 12px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .country-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 15px;
+            flex: 1;
+        }
+        
+        .coverage-status {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.4;
+        }
+        
+        .coverage-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        .full-coverage { background-color: #98E498; }
+        .partial-coverage { background-color: #AEA132; }
+        .limited-coverage { background-color: #B05041; }
+        
+        .map-container {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .map-header {
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        #world-map {
+            flex: 1;
+            width: 100%;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            gap: 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: #555;
+        }
+        
+        .legend-color {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            margin-right: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        .leaflet-popup-content {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 10px;
+        }
+        
+        .popup-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        
+        .popup-coverage {
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <h1>Pedestrian Mapping</h1>
+            <p class="subtitle">National Coverage Status</p>
+            
+            <div class="countries-grid">
+                <div class="country-item" data-country="UK">
+                    <div class="country-header">
+                        <div class="flag">🇬🇧</div>
+                        <div class="country-name">United Kingdom
+                            <span class="coverage-indicator partial-coverage"></span>
+                        </div>
+                    </div>
+                    <div class="coverage-status">
+                        Mapping footpaths nationwide (10+ million paths) with sidewalk presence and width data
+                    </div>
+                </div>
+                
+                <div class="country-item" data-country="Ireland">
+                    <div class="country-header">
+                        <div class="flag">🇮🇪</div>
+                        <div class="country-name">Ireland
+                            <span class="coverage-indicator partial-coverage"></span>
+                        </div>
+                    </div>
+                    <div class="coverage-status">
+                        Including urban footpaths and national walking trails in digital map model
+                    </div>
+                </div>
+                
+                <div class="country-item" data-country="Netherlands">
+                    <div class="country-header">
+                        <div class="flag">🇳🇱</div>
+                        <div class="country-name">Netherlands
+                            <span class="coverage-indicator partial-coverage"></span>
+                        </div>
+                    </div>
+                    <div class="coverage-status">
+                        Nationwide open-data map of walkways and footpaths in BGT base map
+                    </div>
+                </div>
+                
+                <div class="country-item" data-country="Sweden">
+                    <div class="country-header">
+                        <div class="flag">🇸🇪</div>
+                        <div class="country-name">Sweden
+                            <span class="coverage-indicator full-coverage"></span>
+                        </div>
+                    </div>
+                    <div class="coverage-status">
+                        Walking paths and pedestrian streets at multiple scales, regularly updated as open data
+                    </div>
+                </div>
+                
+                <div class="country-item" data-country="Germany">
+                    <div class="country-header">
+                        <div class="flag">🇩🇪</div>
+                        <div class="country-name">Germany
+                            <span class="coverage-indicator partial-coverage"></span>
+                        </div>
+                    </div>
+                    <div class="coverage-status">
+                        Footpaths classified in ATKIS system, including hiking trails and major walking paths
+                    </div>
+                </div>
+                
+                <div class="country-item" data-country="Switzerland">
+                    <div class="country-header">
+                        <div class="flag">🇨🇭</div>
+                        <div class="country-name">Switzerland
+                            <span class="coverage-indicator partial-coverage"></span>
+                        </div>
+                    </div>
+                    <div class="coverage-status">
+                        Nationwide 3D mapping of all paths including mountain trails and urban zones
+                    </div>
+                </div>
+                
+                <div class="country-item" data-country="USA">
+                    <div class="country-header">
+                        <div class="flag">🇺🇸</div>
+                        <div class="country-name">United States
+                            <span class="coverage-indicator limited-coverage"></span>
+                        </div>
+                    </div>
+                    <div class="coverage-status">
+                        Aggregating trails data (277k+ miles) focused on recreational paths
+                    </div>
+                </div>
+                
+                <div class="country-item" data-country="Canada">
+                    <div class="country-header">
+                        <div class="flag">🇨🇦</div>
+                        <div class="country-name">Canada
+                            <span class="coverage-indicator partial-coverage"></span>
+                        </div>
+                    </div>
+                    <div class="coverage-status">
+                        Nationwide dataset consolidating sidewalks and paths from 50+ cities
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="right-panel">
+            <div class="map-container">
+                <div class="map-header">Global Pedestrian Mapping Coverage</div>
+                <div id="world-map"></div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #98E498;"></div>
+                        <span>Full Coverage</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #AEA132;"></div>
+                        <span>Nationwide (Partial)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #B05041;"></div>
+                        <span>Limited Datasets</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize map
+        const map = L.map('world-map', {
+            center: [45, 10],
+            zoom: 3,
+            minZoom: 2,
+            maxZoom: 6,
+            worldCopyJump: true
+        });
+        
+        // Add tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        
+        // Country data with coordinates
+        const countries = [
+            {
+                name: 'United Kingdom',
+                lat: 54.0,
+                lon: -2.0,
+                color: '#98E498',
+                coverage: 'Nationwide footpaths (10+ million paths)',
+                radius: 80000
+            },
+            {
+                name: 'Ireland',
+                lat: 53.4,
+                lon: -8.0,
+                color: '#AEA132',
+                coverage: 'Urban footpaths and trails',
+                radius: 60000
+            },
+            {
+                name: 'Netherlands',
+                lat: 52.3,
+                lon: 5.5,
+                color: '#98E498',
+                coverage: 'Nationwide open-data map',
+                radius: 50000
+            },
+            {
+                name: 'Sweden',
+                lat: 62.0,
+                lon: 15.0,
+                color: '#98E498',
+                coverage: 'Full coverage - All scales',
+                radius: 100000
+            },
+            {
+                name: 'Germany',
+                lat: 51.0,
+                lon: 10.0,
+                color: '#AEA132',
+                coverage: 'ATKIS system footpaths',
+                radius: 90000
+            },
+            {
+                name: 'Switzerland',
+                lat: 46.8,
+                lon: 8.2,
+                color: '#AEA132',
+                coverage: 'Nationwide 3D mapping',
+                radius: 40000
+            },
+            {
+                name: 'United States',
+                lat: 39.0,
+                lon: -98.0,
+                color: '#B05041',
+                coverage: 'Limited - Recreational trails focus',
+                radius: 150000
+            },
+            {
+                name: 'Canada',
+                lat: 56.0,
+                lon: -96.0,
+                color: '#AEA132',
+                coverage: 'Nationwide partial - 50+ cities',
+                radius: 150000
+            }
+        ];
+        
+        // Add circles for each country
+        const markers = {};
+        countries.forEach(country => {
+            const circle = L.circle([country.lat, country.lon], {
+                color: '#fff',
+                fillColor: country.color,
+                fillOpacity: 0.7,
+                radius: country.radius,
+                weight: 2
+            }).addTo(map);
+            
+            // Add popup
+            circle.bindPopup(`
+                <div class="popup-title">${country.name}</div>
+                <div class="popup-coverage">${country.coverage}</div>
+            `);
+            
+            // Store reference
+            markers[country.name.replace(' ', '')] = circle;
+            
+            // Hover effect
+            circle.on('mouseover', function() {
+                this.setStyle({ fillOpacity: 0.9 });
+            });
+            
+            circle.on('mouseout', function() {
+                this.setStyle({ fillOpacity: 0.7 });
+            });
+        });
+        
+        // Country labels
+        countries.forEach(country => {
+            const label = L.divIcon({
+                className: 'country-label',
+                html: `<div style="
+                    color: #333;
+                    font-size: 11px;
+                    font-weight: 600;
+                    text-shadow: 1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, -1px 1px 2px white;
+                    white-space: nowrap;
+                    pointer-events: none;
+                ">${country.name}</div>`,
+                iconSize: [100, 20],
+                iconAnchor: [50, 10]
+            });
+            
+            L.marker([country.lat - 2, country.lon], { icon: label }).addTo(map);
+        });
+        
+        // Interactive features with panel
+        const countryItems = document.querySelectorAll('.country-item');
+        
+        countryItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                const countryCode = item.getAttribute('data-country');
+                const countryName = item.querySelector('.country-name').textContent.trim();
+                
+                // Map country names
+                let markerKey = countryName;
+                if (countryCode === 'UK') markerKey = 'UnitedKingdom';
+                else if (countryCode === 'USA') markerKey = 'UnitedStates';
+                else markerKey = countryName.replace(' ', '');
+                
+                const marker = markers[markerKey];
+                if (marker) {
+                    marker.setStyle({ fillOpacity: 1, weight: 3 });
+                }
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                const countryCode = item.getAttribute('data-country');
+                const countryName = item.querySelector('.country-name').textContent.trim();
+                
+                let markerKey = countryName;
+                if (countryCode === 'UK') markerKey = 'UnitedKingdom';
+                else if (countryCode === 'USA') markerKey = 'UnitedStates';
+                else markerKey = countryName.replace(' ', '');
+                
+                const marker = markers[markerKey];
+                if (marker) {
+                    marker.setStyle({ fillOpacity: 0.7, weight: 2 });
+                }
+            });
+            
+            item.addEventListener('click', () => {
+                const countryCode = item.getAttribute('data-country');
+                const countryName = item.querySelector('.country-name').textContent.trim();
+                
+                let markerKey = countryName;
+                if (countryCode === 'UK') markerKey = 'UnitedKingdom';
+                else if (countryCode === 'USA') markerKey = 'UnitedStates';
+                else markerKey = countryName.replace(' ', '');
+                
+                const marker = markers[markerKey];
+                if (marker) {
+                    marker.openPopup();
+                    const country = countries.find(c => c.name === markerKey.replace('United', 'United '));
+                    if (country) {
+                        map.setView([country.lat, country.lon], 4);
+                    }
+                }
+            });
+        });
+        
+        // Set initial view to show both North America and Europe
+        setTimeout(() => {
+            map.fitBounds([
+                [70, -130], // Northwest
+                [25, 30]    // Southeast
+            ]);
+        }, 100);
+    </script>
+</body>
+</html>
