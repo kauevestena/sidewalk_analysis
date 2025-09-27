@@ -203,11 +203,11 @@
             <p class="subtitle">National Coverage Status</p>
             
             <div class="countries-grid">
-                <div class="country-item" data-country="UK">
+                <div class="country-item" data-country="GBR">
                     <div class="country-header">
                         <div class="flag">🇬🇧</div>
                         <div class="country-name">United Kingdom
-                            <span class="coverage-indicator partial-coverage"></span>
+                            <span class="coverage-indicator full-coverage"></span>
                         </div>
                     </div>
                     <div class="coverage-status">
@@ -215,7 +215,7 @@
                     </div>
                 </div>
                 
-                <div class="country-item" data-country="Ireland">
+                <div class="country-item" data-country="IRL">
                     <div class="country-header">
                         <div class="flag">🇮🇪</div>
                         <div class="country-name">Ireland
@@ -227,11 +227,11 @@
                     </div>
                 </div>
                 
-                <div class="country-item" data-country="Netherlands">
+                <div class="country-item" data-country="NLD">
                     <div class="country-header">
                         <div class="flag">🇳🇱</div>
                         <div class="country-name">Netherlands
-                            <span class="coverage-indicator partial-coverage"></span>
+                            <span class="coverage-indicator full-coverage"></span>
                         </div>
                     </div>
                     <div class="coverage-status">
@@ -239,7 +239,7 @@
                     </div>
                 </div>
                 
-                <div class="country-item" data-country="Sweden">
+                <div class="country-item" data-country="SWE">
                     <div class="country-header">
                         <div class="flag">🇸🇪</div>
                         <div class="country-name">Sweden
@@ -251,7 +251,7 @@
                     </div>
                 </div>
                 
-                <div class="country-item" data-country="Germany">
+                <div class="country-item" data-country="DEU">
                     <div class="country-header">
                         <div class="flag">🇩🇪</div>
                         <div class="country-name">Germany
@@ -263,7 +263,7 @@
                     </div>
                 </div>
                 
-                <div class="country-item" data-country="Switzerland">
+                <div class="country-item" data-country="CHE">
                     <div class="country-header">
                         <div class="flag">🇨🇭</div>
                         <div class="country-name">Switzerland
@@ -287,7 +287,7 @@
                     </div>
                 </div>
                 
-                <div class="country-item" data-country="Canada">
+                <div class="country-item" data-country="CAN">
                     <div class="country-header">
                         <div class="flag">🇨🇦</div>
                         <div class="country-name">Canada
@@ -335,178 +335,193 @@
         });
         
         // Add tile layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors, © CARTO'
         }).addTo(map);
         
-        // Country data with coordinates
+        // Country configuration and remote polygon sources
         const countries = [
             {
+                code: 'GBR',
                 name: 'United Kingdom',
-                lat: 54.0,
-                lon: -2.0,
                 color: '#98E498',
                 coverage: 'Nationwide footpaths (10+ million paths)',
-                radius: 80000
+                geojsonUrl: 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/GBR.geo.json',
+                labelOffset: { lat: -1.2 }
             },
             {
+                code: 'IRL',
                 name: 'Ireland',
-                lat: 53.4,
-                lon: -8.0,
                 color: '#AEA132',
                 coverage: 'Urban footpaths and trails',
-                radius: 60000
+                geojsonUrl: 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/IRL.geo.json',
+                labelOffset: { lat: -0.8 }
             },
             {
+                code: 'NLD',
                 name: 'Netherlands',
-                lat: 52.3,
-                lon: 5.5,
                 color: '#98E498',
                 coverage: 'Nationwide open-data map',
-                radius: 50000
+                geojsonUrl: 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/NLD.geo.json',
+                labelOffset: { lat: -0.5 }
             },
             {
+                code: 'SWE',
                 name: 'Sweden',
-                lat: 62.0,
-                lon: 15.0,
                 color: '#98E498',
                 coverage: 'Full coverage - All scales',
-                radius: 100000
+                geojsonUrl: 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/SWE.geo.json',
+                labelOffset: { lat: -2.0 }
             },
             {
+                code: 'DEU',
                 name: 'Germany',
-                lat: 51.0,
-                lon: 10.0,
                 color: '#AEA132',
                 coverage: 'ATKIS system footpaths',
-                radius: 90000
+                geojsonUrl: 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/DEU.geo.json',
+                labelOffset: { lat: -0.8 }
             },
             {
+                code: 'CHE',
                 name: 'Switzerland',
-                lat: 46.8,
-                lon: 8.2,
                 color: '#AEA132',
                 coverage: 'Nationwide 3D mapping',
-                radius: 40000
+                geojsonUrl: 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/CHE.geo.json',
+                labelOffset: { lat: -0.4 }
             },
             {
+                code: 'USA',
                 name: 'United States',
-                lat: 39.0,
-                lon: -98.0,
                 color: '#B05041',
                 coverage: 'Limited - Recreational trails focus',
-                radius: 150000
+                geojsonUrl: 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/USA.geo.json',
+                labelOffset: { lat: -2.0 }
             },
             {
+                code: 'CAN',
                 name: 'Canada',
-                lat: 56.0,
-                lon: -96.0,
                 color: '#AEA132',
                 coverage: 'Nationwide partial - 50+ cities',
-                radius: 150000
+                geojsonUrl: 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/CAN.geo.json',
+                labelOffset: { lat: -4.0 }
             }
         ];
-        
-        // Add circles for each country
+
+        const countryByCode = countries.reduce((acc, country) => {
+            acc[country.code] = country;
+            return acc;
+        }, {});
+
         const markers = {};
-        countries.forEach(country => {
-            const circle = L.circle([country.lat, country.lon], {
-                color: '#fff',
-                fillColor: country.color,
-                fillOpacity: 0.7,
-                radius: country.radius,
-                weight: 2
-            }).addTo(map);
-            
-            // Add popup
-            circle.bindPopup(`
-                <div class="popup-title">${country.name}</div>
-                <div class="popup-coverage">${country.coverage}</div>
-            `);
-            
-            // Store reference
-            markers[country.name.replace(' ', '')] = circle;
-            
-            // Hover effect
-            circle.on('mouseover', function() {
-                this.setStyle({ fillOpacity: 0.9 });
-            });
-            
-            circle.on('mouseout', function() {
-                this.setStyle({ fillOpacity: 0.7 });
-            });
+
+        const getDefaultStyle = color => ({
+            color: '#ffffff',
+            weight: 1.5,
+            fillColor: color,
+            fillOpacity: 0.65
         });
-        
-        // Country labels
+
+        const getHighlightStyle = color => ({
+            color: '#ffffff',
+            weight: 2.5,
+            fillColor: color,
+            fillOpacity: 0.85
+        });
+
+        const createLabelIcon = text => L.divIcon({
+            className: 'country-label',
+            html: `<div style="
+                color: #333;
+                font-size: 11px;
+                font-weight: 600;
+                text-shadow: 1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, -1px 1px 2px white;
+                white-space: nowrap;
+                pointer-events: none;
+            ">${text}</div>`,
+            iconSize: [100, 20],
+            iconAnchor: [50, 10]
+        });
+
         countries.forEach(country => {
-            const label = L.divIcon({
-                className: 'country-label',
-                html: `<div style="
-                    color: #333;
-                    font-size: 11px;
-                    font-weight: 600;
-                    text-shadow: 1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, -1px 1px 2px white;
-                    white-space: nowrap;
-                    pointer-events: none;
-                ">${country.name}</div>`,
-                iconSize: [100, 20],
-                iconAnchor: [50, 10]
-            });
-            
-            L.marker([country.lat - 2, country.lon], { icon: label }).addTo(map);
+            fetch(country.geojsonUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const layer = L.geoJSON(data, {
+                        style: getDefaultStyle(country.color)
+                    }).addTo(map);
+
+                    const bounds = layer.getBounds();
+                    const centroid = bounds.getCenter();
+
+                    const popupContent = `
+                        <div class="popup-title">${country.name}</div>
+                        <div class="popup-coverage">${country.coverage}</div>
+                    `;
+
+                    layer.bindPopup(popupContent);
+
+                    const labelPosition = L.latLng(
+                        centroid.lat + (country.labelOffset?.lat || 0),
+                        centroid.lng + (country.labelOffset?.lng || 0)
+                    );
+
+                    const label = L.marker(labelPosition, {
+                        icon: createLabelIcon(country.name)
+                    }).addTo(map);
+
+                    const highlight = () => {
+                        layer.setStyle(getHighlightStyle(country.color));
+                        layer.bringToFront();
+                    };
+
+                    const reset = () => {
+                        layer.setStyle(getDefaultStyle(country.color));
+                    };
+
+                    layer.on('mouseover', highlight);
+                    layer.on('mouseout', reset);
+
+                    markers[country.code] = {
+                        layer,
+                        highlight,
+                        reset,
+                        centroid,
+                        popupContent,
+                        label
+                    };
+                })
+                .catch(error => {
+                    console.error(`Failed to load geometry for ${country.name}`, error);
+                });
         });
         
         // Interactive features with panel
         const countryItems = document.querySelectorAll('.country-item');
         
         countryItems.forEach(item => {
+            const countryCode = item.getAttribute('data-country');
+
             item.addEventListener('mouseenter', () => {
-                const countryCode = item.getAttribute('data-country');
-                const countryName = item.querySelector('.country-name').textContent.trim();
-                
-                // Map country names
-                let markerKey = countryName;
-                if (countryCode === 'UK') markerKey = 'UnitedKingdom';
-                else if (countryCode === 'USA') markerKey = 'UnitedStates';
-                else markerKey = countryName.replace(' ', '');
-                
-                const marker = markers[markerKey];
+                const marker = markers[countryCode];
                 if (marker) {
-                    marker.setStyle({ fillOpacity: 1, weight: 3 });
+                    marker.highlight();
                 }
             });
-            
+
             item.addEventListener('mouseleave', () => {
-                const countryCode = item.getAttribute('data-country');
-                const countryName = item.querySelector('.country-name').textContent.trim();
-                
-                let markerKey = countryName;
-                if (countryCode === 'UK') markerKey = 'UnitedKingdom';
-                else if (countryCode === 'USA') markerKey = 'UnitedStates';
-                else markerKey = countryName.replace(' ', '');
-                
-                const marker = markers[markerKey];
+                const marker = markers[countryCode];
                 if (marker) {
-                    marker.setStyle({ fillOpacity: 0.7, weight: 2 });
+                    marker.reset();
                 }
             });
-            
+
             item.addEventListener('click', () => {
-                const countryCode = item.getAttribute('data-country');
-                const countryName = item.querySelector('.country-name').textContent.trim();
-                
-                let markerKey = countryName;
-                if (countryCode === 'UK') markerKey = 'UnitedKingdom';
-                else if (countryCode === 'USA') markerKey = 'UnitedStates';
-                else markerKey = countryName.replace(' ', '');
-                
-                const marker = markers[markerKey];
-                if (marker) {
-                    marker.openPopup();
-                    const country = countries.find(c => c.name === markerKey.replace('United', 'United '));
-                    if (country) {
-                        map.setView([country.lat, country.lon], 4);
-                    }
+                const marker = markers[countryCode];
+                const country = countryByCode[countryCode];
+                if (marker && country) {
+                    marker.highlight();
+                    map.fitBounds(marker.layer.getBounds(), { maxZoom: 5 });
+                    map.openPopup(marker.popupContent, marker.centroid);
                 }
             });
         });
